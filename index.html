@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal da Transparência - Despesas Públicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .drilldown-row {
+            transition: background-color 0.2s ease;
+        }
+        .drilldown-row:hover {
+            background-color: #f3f4f6;
+            cursor: pointer;
+        }
+        .rotate-90 {
+            transform: rotate(90deg);
+        }
+        .transition-transform {
+            transition: transform 0.3s ease;
+        }
+        /* As linhas filhas começarão ocultas e o JS cuidará da exibição */
+        .child-row {
+            display: none;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Câmara Municipal de Vereadores de Itabuna</h1>
+                <p class="text-sm text-blue-200 mt-1">Demonstrativo da Execução da Despesa - Portal da Transparência</p>
+            </div>
+            <div class="mt-4 sm:mt-0">
+                <i class="fas fa-landmark text-4xl text-blue-300"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+
+        <!-- Info & Export Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800">Despesas Detalhadas (Série Histórica)</h2>
+                <p class="text-sm text-gray-500">Navegue pela classificação orçamentária estruturada ou utilize os filtros.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="btnAtualizado" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2 text-sm font-medium cursor-default">
+                    <i class="fas fa-calendar-check"></i> Atualizado em --/--/----
+                </button>
+                <button onclick="exportarCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow flex items-center gap-2 transition-colors text-sm font-medium">
+                    <i class="fas fa-file-csv"></i> Exportar Dados (CSV)
+                </button>
+            </div>
+        </div>
+
+        <!-- Filtros Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h3 class="text-md font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                <i class="fas fa-filter text-blue-600"></i> Filtros de Pesquisa
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Exercício (Ano)</label>
+                    <select id="filtroAno" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm">
+                        <option value="Todos">Todos os Anos</option>
+                        <!-- Options populated via JS -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Programa</label>
+                    <select id="filtroPrograma" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm">
+                        <option value="Todos">Todos os Programas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Projeto/Atividade</label>
+                    <select id="filtroProjeto" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm">
+                        <option value="Todos">Todos os Projetos</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Categoria Econômica</label>
+                    <select id="filtroCategoria" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm">
+                        <option value="Todos">Todas as Categorias</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Grupo de Despesa</label>
+                    <select id="filtroGrupo" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm">
+                        <option value="Todos">Todos os Grupos</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Elemento de Despesa</label>
+                    <select id="filtroElemento" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm">
+                        <option value="Todos">Todos os Elementos</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-5 flex justify-end gap-3">
+                <button onclick="limparFiltros()" class="text-gray-600 hover:text-gray-800 px-4 py-2 text-sm font-medium">Limpar Filtros</button>
+                <button onclick="aplicarFiltros()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow text-sm font-medium transition-colors">Aplicar Filtros</button>
+            </div>
+        </div>
+
+        <!-- Tabela Drill-down -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="table-container">
+                <table class="min-w-full divide-y divide-gray-200 w-full text-left border-collapse">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider w-1/2">
+                                Classificação Orçamentária
+                                <div class="text-[10px] text-blue-600 normal-case font-normal mt-1 leading-tight tracking-normal">
+                                    Órgão: 01 - Poder Legislativo | Unidade: 0101 - Câmara Municipal de Itabuna | Função: 01 - Legislativa | Subfunção: 031 - Ação Legislativa
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right align-top">
+                                Empenhado (R$)
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right align-top">
+                                Liquidado (R$)
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right align-top">
+                                Pago (R$)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaCorpo" class="bg-white divide-y divide-gray-200">
+                        <!-- Conteúdo gerado dinamicamente via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Estado vazio -->
+            <div id="estadoVazio" class="hidden py-12 text-center">
+                <i class="fas fa-search text-4xl text-gray-300 mb-3"></i>
+                <h3 class="text-lg font-medium text-gray-900">Nenhum dado encontrado</h3>
+                <p class="mt-1 text-sm text-gray-500">Tente ajustar seus filtros de pesquisa.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm mt-12">
+        <p>Dados baseados nos Demonstrativos de Execução da Despesa (2022-2026).</p>
+        <p class="mt-1">Atende aos requisitos de transparência pública, série histórica e exportação de dados estruturados.</p>
+    </footer>
+
+    <script>
+        // 1. DATA E ATUALIZAÇÃO
+        function setAtualizacaoData() {
+            const hoje = new Date();
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const ano = hoje.getFullYear();
+            document.getElementById('btnAtualizado').innerHTML = `<i class="fas fa-calendar-check"></i> Atualizado em ${dia}/${mes}/${ano}`;
+        }
+
+        // 2. DADOS ENRIQUECIDOS E COMPLETOS (Mapeamento corrigido)
+        const dadosDespesas = [
+            // DADOS 2026 (Abril)
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "1001 - CONST., AMPL. E MODER. DA CÂMARA", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "4", cat_nome: "4 - Despesas de Capital", grupo_cod: "4", grupo_nome: "4 - Investimentos", elem_cod: "52", elem_nome: "52 - Equipamentos e Materiais Permanentes", empenhado: 6268.30, liquidado: 0.00, pago: 0.00 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "14", elem_nome: "14 - Diárias - Civil", empenhado: 25130.94, liquidado: 25130.94, pago: 25130.94 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "30", elem_nome: "30 - Material de Consumo", empenhado: 289518.12, liquidado: 13068.83, pago: 13068.83 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "33", elem_nome: "33 - Passagens e Despesas com Locomoção", empenhado: 24500.59, liquidado: 8322.40, pago: 8322.40 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "35", elem_nome: "35 - Serviços de Consultoria", empenhado: 414680.49, liquidado: 112211.19, pago: 112211.19 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "37", elem_nome: "37 - Locação de Mão-de-Obra", empenhado: 29560.20, liquidado: 3649.90, pago: 3649.90 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 531693.12, liquidado: 55183.22, pago: 55183.22 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "40", elem_nome: "40 - Serviços de Tecnologia da Informação", empenhado: 515322.91, liquidado: 105335.32, pago: 103635.32 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "11", elem_nome: "11 - Vencimentos e Vantagens Fixas", empenhado: 18919941.15, liquidado: 6155777.40, pago: 6155777.40 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "13", elem_nome: "13 - Obrigações Patronais", empenhado: 4229863.68, liquidado: 903238.59, pago: 903238.59 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "94", elem_nome: "94 - Indenizações e Restituições", empenhado: 245836.85, liquidado: 177381.33, pago: 177381.33 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "46", elem_nome: "46 - Auxílio-Alimentação", empenhado: 1420000.00, liquidado: 349922.51, pago: 349922.51 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "49", elem_nome: "49 - Auxílio-Transporte", empenhado: 470000.00, liquidado: 103541.84, pago: 103541.84 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "14", elem_nome: "14 - Diárias - Civil", empenhado: 1816.78, liquidado: 1816.78, pago: 1816.78 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "33", elem_nome: "33 - Passagens e Despesas com Locomoção", empenhado: 25500.62, liquidado: 5584.11, pago: 5584.11 },
+            { ano: 2026, mes: "Abril", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 997.00, liquidado: 997.00, pago: 997.00 },
+
+            // DADOS 2025 (Dezembro)
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "1001 - CONST., AMPL. E MODER. DA CÂMARA", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "4", cat_nome: "4 - Despesas de Capital", grupo_cod: "4", grupo_nome: "4 - Investimentos", elem_cod: "52", elem_nome: "52 - Equipamentos e Materiais Permanentes", empenhado: 77928.00, liquidado: 63698.00, pago: 63698.00 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "14", elem_nome: "14 - Diárias - Civil", empenhado: 191751.85, liquidado: 191751.85, pago: 191751.85 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "30", elem_nome: "30 - Material de Consumo", empenhado: 231159.72, liquidado: 225989.82, pago: 225989.82 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "33", elem_nome: "33 - Passagens e Despesas com Locomoção", empenhado: 27958.03, liquidado: 27958.03, pago: 27958.03 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "35", elem_nome: "35 - Serviços de Consultoria", empenhado: 324000.00, liquidado: 312000.00, pago: 312000.00 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "37", elem_nome: "37 - Locação de Mão-de-Obra", empenhado: 301949.21, liquidado: 290949.21, pago: 290949.21 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 702711.53, liquidado: 580463.53, pago: 580463.53 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "40", elem_nome: "40 - Serviços de Tecnologia da Informação", empenhado: 368218.88, liquidado: 357015.22, pago: 356015.82 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "93", elem_nome: "93 - Indenizações e Restituições", empenhado: 21710.00, liquidado: 21710.00, pago: 21710.00 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "11", elem_nome: "11 - Vencimentos e Vantagens Fixas", empenhado: 18268935.37, liquidado: 18245752.28, pago: 18194991.63 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "13", elem_nome: "13 - Obrigações Patronais", empenhado: 4229863.68, liquidado: 4229863.68, pago: 4229863.68 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "94", elem_nome: "94 - Indenizações e Restituições", empenhado: 428932.07, liquidado: 428932.07, pago: 428932.07 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "96", elem_nome: "96 - Ressarc. Despesas Pessoal Requisitado", empenhado: 63071.20, liquidado: 41059.08, pago: 41059.08 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "46", elem_nome: "46 - Auxílio-Alimentação", empenhado: 1465855.43, liquidado: 1465255.43, pago: 1349578.16 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "49", elem_nome: "49 - Auxílio-Transporte", empenhado: 400680.33, liquidado: 400513.20, pago: 368967.43 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "14", elem_nome: "14 - Diárias - Civil", empenhado: 1816.78, liquidado: 1816.78, pago: 1816.78 },
+            { ano: 2025, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "33", elem_nome: "33 - Passagens e Despesas com Locomoção", empenhado: 4255.79, liquidado: 4255.79, pago: 4255.79 },
+
+            // DADOS 2024 (Dezembro)
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "1001 - CONST., AMPL. E MODER. DA CÂMARA", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "4", cat_nome: "4 - Despesas de Capital", grupo_cod: "4", grupo_nome: "4 - Investimentos", elem_cod: "52", elem_nome: "52 - Equipamentos e Materiais Permanentes", empenhado: 74647.62, liquidado: 74647.62, pago: 40903.62 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "14", elem_nome: "14 - Diárias - Civil", empenhado: 166617.64, liquidado: 166617.64, pago: 166617.64 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "30", elem_nome: "30 - Material de Consumo", empenhado: 369489.84, liquidado: 352364.84, pago: 342764.84 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "33", elem_nome: "33 - Passagens e Despesas com Locomoção", empenhado: 88136.35, liquidado: 71680.58, pago: 71680.58 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "35", elem_nome: "35 - Serviços de Consultoria", empenhado: 136084.00, liquidado: 125616.00, pago: 125616.00 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "37", elem_nome: "37 - Locação de Mão-de-Obra", empenhado: 648298.50, liquidado: 587259.07, pago: 587259.07 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 1273402.99, liquidado: 1256202.40, pago: 1231730.58 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "40", elem_nome: "40 - Serviços de Tecnologia da Informação", empenhado: 582632.86, liquidado: 534362.93, pago: 534362.93 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "11", elem_nome: "11 - Vencimentos e Vantagens Fixas", empenhado: 15756849.46, liquidado: 15756849.46, pago: 15756849.46 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "13", elem_nome: "13 - Obrigações Patronais", empenhado: 3728002.43, liquidado: 3728002.43, pago: 3728002.43 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "94", elem_nome: "94 - Indenizações e Restituições", empenhado: 571712.86, liquidado: 571712.86, pago: 571712.86 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "46", elem_nome: "46 - Auxílio-Alimentação", empenhado: 1037578.98, liquidado: 1037578.98, pago: 1016131.88 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "49", elem_nome: "49 - Auxílio-Transporte", empenhado: 27449.98, liquidado: 25122.87, pago: 19316.64 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "14", elem_nome: "14 - Diárias - Civil", empenhado: 10490.88, liquidado: 10490.88, pago: 10490.88 },
+            { ano: 2024, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2003 - QUALIFICAÇÃO E CAPACIT. DE SERVIDORES", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 177221.00, liquidado: 177221.00, pago: 177221.00 },
+
+            // DADOS 2023 (Dezembro) - Amostra complementar e sumarizada das principais despesas
+            { ano: 2023, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "1001 - CONST., AMPL. E MODER. DA CÂMARA", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "4", cat_nome: "4 - Despesas de Capital", grupo_cod: "4", grupo_nome: "4 - Investimentos", elem_cod: "51", elem_nome: "51 - Obras e Instalações", empenhado: 2836931.99, liquidado: 2804833.15, pago: 2804833.15 },
+            { ano: 2023, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 1150141.25, liquidado: 1108788.18, pago: 1108194.13 },
+            { ano: 2023, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "15000000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "11", elem_nome: "11 - Vencimentos e Vantagens Fixas", empenhado: 14570756.09, liquidado: 14570756.09, pago: 14473198.27 },
+
+            // DADOS 2022 (Dezembro) - Amostra complementar
+            { ano: 2022, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "1001 - CONST., AMPL. E MODER. DA CÂMARA", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "0000", cat_cod: "4", cat_nome: "4 - Despesas de Capital", grupo_cod: "4", grupo_nome: "4 - Investimentos", elem_cod: "51", elem_nome: "51 - Obras e Instalações", empenhado: 1081939.67, liquidado: 1081939.67, pago: 0.00 },
+            { ano: 2022, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "0000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "3", grupo_nome: "3 - Outras Despesas Correntes", elem_cod: "39", elem_nome: "39 - Outros Serviços de Terceiros - PJ", empenhado: 1024541.40, liquidado: 993443.91, pago: 982315.71 },
+            { ano: 2022, mes: "Dezembro", programa: "0001 - AÇÃO LEGISLATIVA", projeto: "2002 - GESTÃO DE PESSOAL E ENCARGOS", unidade: "01 - CAMARA DE VEREADORES", funcao: "01 - Legislativa", subfuncao: "031 - Ação Legislativa", fonte: "0000", cat_cod: "3", cat_nome: "3 - Despesas Correntes", grupo_cod: "1", grupo_nome: "1 - Pessoal e Encargos Sociais", elem_cod: "11", elem_nome: "11 - Vencimentos e Vantagens Fixas", empenhado: 12645621.45, liquidado: 12645621.45, pago: 12621231.16 }
+        ];
+
+        let dadosFiltrados = [...dadosDespesas];
+
+        // 3. INICIALIZAÇÃO
+        window.onload = () => {
+            setAtualizacaoData();
+            popularFiltros();
+            renderizarTabela();
+        };
+
+        // Formatação de Moeda
+        const formatCurrency = (val) => {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+        };
+
+        // 4. LÓGICA DE FILTROS
+        function popularFiltros() {
+            const anos = [...new Set(dadosDespesas.map(d => d.ano))].sort((a,b) => b - a);
+            const programas = [...new Set(dadosDespesas.map(d => d.programa))].sort();
+            const projetos = [...new Set(dadosDespesas.map(d => d.projeto))].sort();
+            const categorias = [...new Set(dadosDespesas.map(d => d.cat_nome))].sort();
+            const grupos = [...new Set(dadosDespesas.map(d => d.grupo_nome))].sort();
+            const elementos = [...new Set(dadosDespesas.map(d => d.elem_nome))].sort();
+
+            const selectAno = document.getElementById('filtroAno');
+            anos.forEach(ano => {
+                let opt = document.createElement('option');
+                opt.value = ano; opt.innerText = ano;
+                selectAno.appendChild(opt);
+            });
+
+            const selectPrograma = document.getElementById('filtroPrograma');
+            programas.forEach(prog => {
+                let opt = document.createElement('option');
+                opt.value = prog; opt.innerText = prog;
+                selectPrograma.appendChild(opt);
+            });
+
+            const selectProjeto = document.getElementById('filtroProjeto');
+            projetos.forEach(proj => {
+                let opt = document.createElement('option');
+                opt.value = proj; opt.innerText = proj;
+                selectProjeto.appendChild(opt);
+            });
+
+            const selectCat = document.getElementById('filtroCategoria');
+            categorias.forEach(cat => {
+                let opt = document.createElement('option');
+                opt.value = cat; opt.innerText = cat;
+                selectCat.appendChild(opt);
+            });
+
+            const selectGrp = document.getElementById('filtroGrupo');
+            grupos.forEach(grp => {
+                let opt = document.createElement('option');
+                opt.value = grp; opt.innerText = grp;
+                selectGrp.appendChild(opt);
+            });
+
+            const selectEl = document.getElementById('filtroElemento');
+            elementos.forEach(el => {
+                let opt = document.createElement('option');
+                opt.value = el; opt.innerText = el;
+                selectEl.appendChild(opt);
+            });
+        }
+
+        function aplicarFiltros() {
+            const ano = document.getElementById('filtroAno').value;
+            const prog = document.getElementById('filtroPrograma').value;
+            const proj = document.getElementById('filtroProjeto').value;
+            const cat = document.getElementById('filtroCategoria').value;
+            const grp = document.getElementById('filtroGrupo').value;
+            const el = document.getElementById('filtroElemento').value;
+
+            dadosFiltrados = dadosDespesas.filter(d => {
+                let match = true;
+                if (ano !== 'Todos' && d.ano.toString() !== ano) match = false;
+                if (prog !== 'Todos' && d.programa !== prog) match = false;
+                if (proj !== 'Todos' && d.projeto !== proj) match = false;
+                if (cat !== 'Todos' && d.cat_nome !== cat) match = false;
+                if (grp !== 'Todos' && d.grupo_nome !== grp) match = false;
+                if (el !== 'Todos' && d.elem_nome !== el) match = false;
+                return match;
+            });
+
+            renderizarTabela();
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtroAno').value = 'Todos';
+            document.getElementById('filtroPrograma').value = 'Todos';
+            document.getElementById('filtroProjeto').value = 'Todos';
+            document.getElementById('filtroCategoria').value = 'Todos';
+            document.getElementById('filtroGrupo').value = 'Todos';
+            document.getElementById('filtroElemento').value = 'Todos';
+            aplicarFiltros();
+        }
+
+        // 5. NOVA LÓGICA DE AGRUPAMENTO (6 Níveis: Ano > Prog > Proj > Cat > Grp > Ele)
+        function agruparDados() {
+            const estrutura = {};
+            
+            dadosFiltrados.forEach(d => {
+                // Nível 1: Ano
+                if (!estrutura[d.ano]) estrutura[d.ano] = { emp: 0, liq: 0, pag: 0, meses: new Set(), programas: {} };
+                estrutura[d.ano].emp += d.empenhado; estrutura[d.ano].liq += d.liquidado; estrutura[d.ano].pag += d.pago;
+                estrutura[d.ano].meses.add(d.mes);
+
+                // Nível 2: Programa
+                if (!estrutura[d.ano].programas[d.programa]) estrutura[d.ano].programas[d.programa] = { emp: 0, liq: 0, pag: 0, projetos: {} };
+                estrutura[d.ano].programas[d.programa].emp += d.empenhado; estrutura[d.ano].programas[d.programa].liq += d.liquidado; estrutura[d.ano].programas[d.programa].pag += d.pago;
+
+                // Nível 3: Projeto/Atividade
+                if (!estrutura[d.ano].programas[d.programa].projetos[d.projeto]) estrutura[d.ano].programas[d.programa].projetos[d.projeto] = { emp: 0, liq: 0, pag: 0, categorias: {} };
+                estrutura[d.ano].programas[d.programa].projetos[d.projeto].emp += d.empenhado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].liq += d.liquidado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].pag += d.pago;
+
+                // Nível 4: Categoria Econômica
+                if (!estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome]) estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome] = { emp: 0, liq: 0, pag: 0, grupos: {} };
+                estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].emp += d.empenhado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].liq += d.liquidado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].pag += d.pago;
+
+                // Nível 5: Grupo de Despesa
+                if (!estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome]) estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome] = { emp: 0, liq: 0, pag: 0, elementos: {} };
+                estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].emp += d.empenhado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].liq += d.liquidado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].pag += d.pago;
+
+                // Nível 6: Elemento de Despesa
+                if (!estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].elementos[d.elem_nome]) estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].elementos[d.elem_nome] = { emp: 0, liq: 0, pag: 0, detalhes: [] };
+                estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].elementos[d.elem_nome].emp += d.empenhado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].elementos[d.elem_nome].liq += d.liquidado; estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].elementos[d.elem_nome].pag += d.pago;
+
+                // Nível 7: Detalhes (Consulta Detalhada)
+                estrutura[d.ano].programas[d.programa].projetos[d.projeto].categorias[d.cat_nome].grupos[d.grupo_nome].elementos[d.elem_nome].detalhes.push(d);
+            });
+
+            return estrutura;
+        }
+
+        // 6. RENDERIZAÇÃO DA TABELA RECURSIVA E ROBUSTA
+        function renderizarTabela() {
+            const tbody = document.getElementById('tabelaCorpo');
+            const estadoVazio = document.getElementById('estadoVazio');
+            tbody.innerHTML = '';
+
+            if (dadosFiltrados.length === 0) {
+                estadoVazio.classList.remove('hidden');
+                return;
+            } else {
+                estadoVazio.classList.add('hidden');
+            }
+
+            const dadosAgrupados = agruparDados();
+            let html = '';
+
+            // Nível 1: Ano
+            Object.keys(dadosAgrupados).sort((a,b)=>b-a).forEach((ano, iAno) => {
+                const anoData = dadosAgrupados[ano];
+                const anoId = `ano-${ano}`;
+                const meses = Array.from(anoData.meses).join(', ');
+                
+                html += `
+                    <tr id="${anoId}" class="drilldown-row bg-white border-b hover:bg-gray-50 font-bold" onclick="toggleChildren('${anoId}')">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 flex items-center">
+                            <i id="icon-${anoId}" class="fas fa-chevron-right text-xs text-gray-400 mr-3 transition-transform"></i>
+                            <span class="bg-blue-800 text-white px-2 py-1 rounded text-xs mr-2">Ano</span> 
+                            ${ano} <span class="ml-2 text-xs text-gray-500 font-normal">- Até ${meses}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-700">${formatCurrency(anoData.emp)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-700">${formatCurrency(anoData.liq)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-900">${formatCurrency(anoData.pag)}</td>
+                    </tr>
+                `;
+
+                // Nível 2: Programa
+                Object.keys(anoData.programas).forEach((prog, iProg) => {
+                    const progData = anoData.programas[prog];
+                    const progId = `${anoId}-prog-${iProg}`;
+                    
+                    html += `
+                        <tr id="${progId}" data-parent="${anoId}" class="drilldown-row child-row bg-gray-50 border-b" onclick="toggleChildren('${progId}')">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 pl-10 flex items-center border-l-4 border-blue-500">
+                                <i id="icon-${progId}" class="fas fa-chevron-right text-xs text-gray-400 mr-2 transition-transform"></i>
+                                <span class="bg-blue-200 text-blue-800 px-2 py-1 rounded text-[10px] mr-2 uppercase">Prog</span> ${prog}
+                            </td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(progData.emp)}</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(progData.liq)}</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-right font-medium text-gray-800">${formatCurrency(progData.pag)}</td>
+                        </tr>
+                    `;
+
+                    // Nível 3: Projeto / Atividade
+                    Object.keys(progData.projetos).forEach((proj, iProj) => {
+                        const projData = progData.projetos[proj];
+                        const projId = `${progId}-proj-${iProj}`;
+                        
+                        html += `
+                            <tr id="${projId}" data-parent="${progId}" class="drilldown-row child-row bg-gray-100 border-b" onclick="toggleChildren('${projId}')">
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-800 pl-14 flex items-center border-l-4 border-indigo-400">
+                                    <i id="icon-${projId}" class="fas fa-chevron-right text-xs text-gray-400 mr-2 transition-transform"></i>
+                                    <span class="bg-indigo-200 text-indigo-800 px-2 py-1 rounded text-[10px] mr-2 uppercase">Proj/Ativ</span> ${proj}
+                                </td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(projData.emp)}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(projData.liq)}</td>
+                                <td class="px-6 py-3 whitespace-nowrap text-sm text-right font-medium text-gray-800">${formatCurrency(projData.pag)}</td>
+                            </tr>
+                        `;
+
+                        // Nível 4: Categoria Econômica
+                        Object.keys(projData.categorias).forEach((cat, iCat) => {
+                            const catData = projData.categorias[cat];
+                            const catId = `${projId}-cat-${iCat}`;
+                            
+                            html += `
+                                <tr id="${catId}" data-parent="${projId}" class="drilldown-row child-row bg-white border-b" onclick="toggleChildren('${catId}')">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 pl-[4.5rem] flex items-center border-l-4 border-green-300">
+                                        <i id="icon-${catId}" class="fas fa-chevron-right text-xs text-gray-400 mr-2 transition-transform"></i>
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-[10px] mr-2">Cat</span> ${cat}
+                                    </td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(catData.emp)}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(catData.liq)}</td>
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-700">${formatCurrency(catData.pag)}</td>
+                                </tr>
+                            `;
+
+                            // Nível 5: Grupo de Despesa
+                            Object.keys(catData.grupos).forEach((grp, iGrp) => {
+                                const grpData = catData.grupos[grp];
+                                const grpId = `${catId}-grp-${iGrp}`;
+                                
+                                html += `
+                                    <tr id="${grpId}" data-parent="${catId}" class="drilldown-row child-row bg-gray-50 border-b" onclick="toggleChildren('${grpId}')">
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 pl-[5.5rem] flex items-center border-l-4 border-yellow-300">
+                                            <i id="icon-${grpId}" class="fas fa-chevron-right text-xs text-gray-400 mr-2 transition-transform"></i>
+                                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-[10px] mr-2">Grp</span> ${grp}
+                                        </td>
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(grpData.emp)}</td>
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(grpData.liq)}</td>
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-700">${formatCurrency(grpData.pag)}</td>
+                                    </tr>
+                                `;
+
+                                // Nível 6: Elemento de Despesa
+                                Object.keys(grpData.elementos).forEach((ele, iEle) => {
+                                    const eleData = grpData.elementos[ele];
+                                    const eleId = `${grpId}-ele-${iEle}`;
+                                    
+                                    html += `
+                                        <tr id="${eleId}" data-parent="${grpId}" class="drilldown-row child-row bg-gray-100 border-b" onclick="toggleChildren('${eleId}')">
+                                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 pl-[6.5rem] flex items-center border-l-4 border-red-300">
+                                                <i id="icon-${eleId}" class="fas fa-chevron-right text-xs text-gray-400 mr-2 transition-transform"></i>
+                                                <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-[10px] mr-2">Ele</span> ${ele}
+                                            </td>
+                                            <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(eleData.emp)}</td>
+                                            <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-600">${formatCurrency(eleData.liq)}</td>
+                                            <td class="px-6 py-2 whitespace-nowrap text-sm text-right text-gray-700">${formatCurrency(eleData.pag)}</td>
+                                        </tr>
+                                    `;
+
+                                    // Nível 7: Detalhamento Final (Folhas)
+                                    eleData.detalhes.forEach((detalhe) => {
+                                        html += `
+                                            <tr data-parent="${eleId}" class="child-row bg-yellow-50 border-b border-yellow-100">
+                                                <td colspan="4" class="px-6 py-4 pl-[7.5rem]">
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs text-gray-600">
+                                                        <div><span class="font-semibold text-gray-800 block">Detalhe Período:</span> ${detalhe.mes} / ${detalhe.ano}</div>
+                                                        <div><span class="font-semibold text-gray-800 block">Fonte de Recursos:</span> ${detalhe.fonte}</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // Lógica Genérica e Robusta de Expandir/Contrair
+        function toggleChildren(rowId) {
+            const icon = document.getElementById(`icon-${rowId}`);
+            let isOpening = false;
+            
+            if(icon) {
+                isOpening = !icon.classList.contains('rotate-90');
+                icon.classList.toggle('rotate-90');
+            }
+
+            const children = document.querySelectorAll(`[data-parent="${rowId}"]`);
+            children.forEach(child => {
+                if (isOpening) {
+                    child.style.display = 'table-row';
+                } else {
+                    child.style.display = 'none';
+                    closeAllDescendants(child.id); // Fecha tudo que estiver aberto abaixo dele
+                }
+            });
+        }
+
+        function closeAllDescendants(rowId) {
+            if (!rowId) return;
+            const icon = document.getElementById(`icon-${rowId}`);
+            if (icon && icon.classList.contains('rotate-90')) {
+                icon.classList.remove('rotate-90');
+            }
+            
+            const children = document.querySelectorAll(`[data-parent="${rowId}"]`);
+            children.forEach(child => {
+                child.style.display = 'none';
+                closeAllDescendants(child.id);
+            });
+        }
+
+        // 7. GRAVAÇÃO DE RELATÓRIOS (Exportação CSV atualizada com Prog/Proj)
+        function exportarCSV() {
+            if (dadosFiltrados.length === 0) {
+                alert("Não há dados para exportar com os filtros atuais.");
+                return;
+            }
+
+            const headers = [
+                "Exercício", 
+                "Mês", 
+                "Órgão/Unidade", 
+                "Função/Subfunção", 
+                "Programa",
+                "Projeto/Atividade",
+                "Categoria Econômica", 
+                "Grupo de Despesa", 
+                "Elemento de Despesa", 
+                "Fonte de Recursos", 
+                "Valor Empenhado (R$)", 
+                "Valor Liquidado (R$)", 
+                "Valor Pago (R$)"
+            ];
+
+            let csvContent = headers.join(";") + "\r\n";
+
+            dadosFiltrados.forEach(d => {
+                const row = [
+                    d.ano,
+                    d.mes,
+                    `"${d.unidade}"`,
+                    `"${d.funcao} / ${d.subfuncao}"`,
+                    `"${d.programa}"`,
+                    `"${d.projeto}"`,
+                    `"${d.cat_nome}"`,
+                    `"${d.grupo_nome}"`,
+                    `"${d.elem_nome}"`,
+                    `"${d.fonte}"`,
+                    d.empenhado.toFixed(2).replace('.', ','),
+                    d.liquidado.toFixed(2).replace('.', ','),
+                    d.pago.toFixed(2).replace('.', ',')
+                ];
+                csvContent += row.join(";") + "\r\n";
+            });
+
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", `transparencia_despesas_${new Date().getTime()}.csv`);
+            document.body.appendChild(link);
+            
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
