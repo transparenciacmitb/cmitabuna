@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Transparência - Receitas | Itabuna</title>
+    <!-- Tailwind CSS para Estilização Rápida e Responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configuração das cores da bandeira de Itabuna
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ita-yellow': '#FFD100', // Amarelo
+                        'ita-black': '#111827',  // Preto
+                        'ita-gray-dark': '#4B5563', // Cinza Escuro
+                        'ita-gray-light': '#E5E7EB', // Cinza Claro
+                        'ita-white': '#FFFFFF',  // Branco
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome para Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Estilos adicionais para scrollbar e transições */
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .table-container { max-height: 70vh; overflow-y: auto; }
+    </style>
+</head>
+<body class="bg-ita-gray-light text-ita-black min-h-screen flex flex-col">
+
+    <!-- Cabeçalho -->
+    <header class="bg-ita-black text-ita-white border-b-4 border-ita-yellow shadow-md">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="bg-ita-white p-2 rounded-full border-2 border-ita-yellow">
+                    <i class="fas fa-landmark text-ita-black text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold uppercase tracking-wider">Câmara Municipal de Itabuna</h1>
+                    <p class="text-sm text-ita-yellow font-semibold">Portal de Transparência Legislativa</p>
+                </div>
+            </div>
+            <div class="mt-4 md:mt-0 text-right">
+                <h2 class="text-lg font-medium">Receitas Previstas vs. Repassadas</h2>
+                <p class="text-xs text-gray-400">Atendimento aos Critérios do PNTP</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Caminho do Site (Breadcrumbs) -->
+        <nav class="flex text-sm text-ita-gray-dark mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                <li class="inline-flex items-center">
+                    <a href="https://cmitabuna-ba.portaltp.com.br/" target="_blank" class="inline-flex items-center hover:text-ita-black hover:underline transition-colors">
+                        <i class="fas fa-home mr-2"></i>
+                        Portal
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 text-xs mx-1 md:mx-2"></i>
+                        <a href="https://cmitabuna-ba.portaltp.com.br/consultas/receitas.aspx" target="_blank" class="hover:text-ita-black hover:underline transition-colors">Receita</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 text-xs mx-1 md:mx-2"></i>
+                        <a href="https://cmitabuna-ba.portaltp.com.br/consultas/documentos.aspx?id=809" target="_blank" class="text-ita-black font-semibold hover:underline">Receita Prevista x Receita Realizada</a>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Painel de Controlo (Filtros e Exportação) -->
+        <div class="bg-ita-white rounded-lg shadow-md p-6 mb-6 border border-gray-200">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-4">
+                
+                <!-- Filtros -->
+                <div class="flex-grow flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                    <div class="w-full md:w-1/3">
+                        <label for="yearFilter" class="block text-sm font-bold text-ita-gray-dark mb-1">Exercício (Ano):</label>
+                        <select id="yearFilter" class="w-full bg-ita-gray-light border border-gray-300 text-ita-black text-sm rounded focus:ring-ita-yellow focus:border-ita-yellow block p-2.5">
+                            <option value="all">Todos os Anos</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <div class="w-full md:w-1/3">
+                        <label for="monthFilter" class="block text-sm font-bold text-ita-gray-dark mb-1">Mês de Referência:</label>
+                        <select id="monthFilter" class="w-full bg-ita-gray-light border border-gray-300 text-ita-black text-sm rounded focus:ring-ita-yellow focus:border-ita-yellow block p-2.5">
+                            <option value="all">Todos os Meses</option>
+                            <option value="Janeiro">Janeiro</option>
+                            <option value="Fevereiro">Fevereiro</option>
+                            <option value="Março">Março</option>
+                            <option value="Abril">Abril</option>
+                            <option value="Maio">Maio</option>
+                            <option value="Junho">Junho</option>
+                            <option value="Julho">Julho</option>
+                            <option value="Agosto">Agosto</option>
+                            <option value="Setembro">Setembro</option>
+                            <option value="Outubro">Outubro</option>
+                            <option value="Novembro">Novembro</option>
+                            <option value="Dezembro">Dezembro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Botão de Exportação -->
+                <div class="w-full md:w-auto flex justify-end">
+                    <button onclick="exportToCSV()" class="bg-ita-yellow hover:bg-yellow-500 text-ita-black font-bold py-2.5 px-6 rounded shadow transition duration-200 flex items-center gap-2">
+                        <i class="fas fa-download"></i> Exportar Dados (.CSV)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área da Tabela -->
+        <div class="bg-ita-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+            <div class="table-container">
+                <table class="w-full text-sm text-left text-ita-black">
+                    <tbody id="tableBody">
+                        <!-- O conteúdo será injetado pelo JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-ita-black text-ita-white py-4 border-t-4 border-ita-yellow mt-auto">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Fonte dos dados: Relações de Transferências Concedidas/Recebidas da Câmara Municipal de Itabuna.</p>
+            <p class="text-gray-400 mt-1">Desenvolvido em conformidade com as diretrizes de Transparência Pública.</p>
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript -->
+    <script>
+        // Base de Dados (Extraída dos documentos PDF fornecidos)
+        const db = [
+            // EXERCÍCIO 2026
+            { year: 2026, month: 'Janeiro', expected: 2605733.90, realized: 2491071.88, date: '16/01/2026' },
+            { year: 2026, month: 'Fevereiro', expected: 2605733.90, realized: 2491071.88, date: '10/02/2026' },
+            { year: 2026, month: 'Março', expected: 2605733.90, realized: 2491071.88, date: '10/03/2026' },
+            { year: 2026, month: 'Abril', expected: 2605733.90, realized: 2491071.88, date: '13/04/2026' },
+
+            // EXERCÍCIO 2025
+            { year: 2025, month: 'Janeiro', expected: 2482980.66, realized: 2482554.20, date: '14/01/2025' },
+            { year: 2025, month: 'Fevereiro', expected: 2482980.66, realized: 2482554.20, date: '10/02/2025' },
+            { year: 2025, month: 'Março', expected: 2482980.66, realized: 2482554.20, date: '17/03/2025' },
+            { year: 2025, month: 'Abril', expected: 2482980.66, realized: 2482554.20, date: '10/04/2025' },
+            { year: 2025, month: 'Maio', expected: 2482980.66, realized: 2482554.20, date: '09/05/2025' },
+            { year: 2025, month: 'Junho', expected: 2482980.66, realized: 2481987.51, date: '25/06/2025' },
+            { year: 2025, month: 'Julho', expected: 2482980.66, realized: 2481987.51, date: '10/07/2025' },
+            { year: 2025, month: 'Agosto', expected: 2482980.66, realized: 2481987.51, date: '11/08/2025' },
+            { year: 2025, month: 'Setembro', expected: 2482980.66, realized: 2481987.51, date: '10/09/2025' },
+            { year: 2025, month: 'Outubro', expected: 2482980.66, realized: 2481987.51, date: '20/10/2025' },
+            { year: 2025, month: 'Novembro', expected: 2482980.66, realized: 2481987.51, date: '18/11/2025' },
+            { year: 2025, month: 'Dezembro', expected: 2482980.66, realized: 2491071.88, date: '23/12/2025' },
+
+            // EXERCÍCIO 2024
+            { year: 2024, month: 'Janeiro', expected: 2162691.23, realized: 2060489.43, date: '19/01/2024' },
+            { year: 2024, month: 'Fevereiro', expected: 2162691.23, realized: 2060489.43, date: '16/02/2024' },
+            { year: 2024, month: 'Março', expected: 2162691.23, realized: 2183320.40, date: '19/03/2024' },
+            { year: 2024, month: 'Abril', expected: 2162691.23, realized: 2183320.40, date: '10/04/2024' },
+            { year: 2024, month: 'Maio', expected: 2162691.23, realized: 2183320.40, date: '10/05/2024' },
+            { year: 2024, month: 'Junho', expected: 2162691.23, realized: 2183320.40, date: '10/06/2024' },
+            { year: 2024, month: 'Julho', expected: 2162691.23, realized: 2183320.40, date: '11/07/2024' },
+            { year: 2024, month: 'Agosto', expected: 2162691.23, realized: 2183320.40, date: '09/08/2024' },
+            { year: 2024, month: 'Setembro', expected: 2162691.23, realized: 2182848.36, date: '10/09/2024' },
+            { year: 2024, month: 'Outubro', expected: 2162691.23, realized: 2182848.36, date: '18/10/2024' },
+            { year: 2024, month: 'Novembro', expected: 2162691.23, realized: 2182848.36, date: '08/11/2024' },
+            { year: 2024, month: 'Dezembro', expected: 2162691.23, realized: 2182848.38, date: '17/12/2024' },
+
+            // EXERCÍCIO 2023
+            { year: 2023, month: 'Janeiro', expected: 2057867.05, realized: 2050000.00, date: '18/01/2023' },
+            { year: 2023, month: 'Fevereiro', expected: 2057867.05, realized: 2050000.00, date: '17/02/2023' },
+            { year: 2023, month: 'Março', expected: 2057867.05, realized: 2050000.00, date: '20/03/2023' },
+            { year: 2023, month: 'Abril', expected: 2057867.05, realized: 2060489.39, date: '19/04/2023' },
+            { year: 2023, month: 'Maio', expected: 2057867.05, realized: 2060489.39, date: '19/05/2023' },
+            { year: 2023, month: 'Junho', expected: 2057867.05, realized: 2060489.39, date: '20/06/2023' },
+            { year: 2023, month: 'Julho', expected: 2057867.05, realized: 2060489.39, date: '20/07/2023' },
+            { year: 2023, month: 'Agosto', expected: 2057867.05, realized: 2060489.39, date: '18/08/2023' },
+            { year: 2023, month: 'Setembro', expected: 2057867.05, realized: 2060489.39, date: '20/09/2023' },
+            { year: 2023, month: 'Outubro', expected: 2057867.05, realized: 2060489.39, date: '19/10/2023' },
+            { year: 2023, month: 'Novembro', expected: 2057867.05, realized: 2060489.39, date: '17/11/2023' },
+            { year: 2023, month: 'Dezembro', expected: 2057867.05, realized: 2060489.43, date: '20/12/2023' }
+        ];
+
+        let currentFilteredData = [];
+        let expandedState = {}; // Novo estado para controlar abertura/fecho dos anos
+
+        // Função para formatar moeda em Reais (BRL)
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        };
+
+        // Função para atualizar a tabela na interface
+        function renderTable() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            if (currentFilteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Nenhum registo encontrado para os filtros selecionados.</td></tr>';
+                return;
+            }
+
+            // Agrupar dados por ano
+            const groupedData = currentFilteredData.reduce((acc, curr) => {
+                if (!acc[curr.year]) acc[curr.year] = [];
+                acc[curr.year].push(curr);
+                return acc;
+            }, {});
+
+            // Ordenar anos em ordem decrescente
+            const years = Object.keys(groupedData).sort((a, b) => b - a);
+
+            years.forEach(year => {
+                // Estado de expansão padrão (aberto)
+                if (expandedState[year] === undefined) {
+                    expandedState[year] = true;
+                }
+
+                // Cabeçalho de Agrupamento por Ano (Agora Interativo e Congelado)
+                const yearHeader = document.createElement('tr');
+                yearHeader.className = 'cursor-pointer hover:bg-gray-200 transition-colors';
+                yearHeader.onclick = () => toggleYear(year);
+                
+                const chevronClass = expandedState[year] ? 'fa-chevron-down' : 'fa-chevron-right';
+                
+                yearHeader.innerHTML = `
+                    <td colspan="5" class="h-12 px-6 select-none sticky top-0 z-20 bg-ita-gray-light border-b border-gray-300 shadow-sm">
+                        <div class="flex items-center justify-between font-bold text-ita-black h-full">
+                            <div>
+                                <i class="fas fa-calendar-alt mr-2 text-ita-gray-dark"></i> Exercício Financeiro: ${year}
+                            </div>
+                            <div class="flex items-center text-xs text-ita-gray-dark font-normal">
+                                <span class="mr-2">Clique para expandir/recolher</span>
+                                <i class="fas ${chevronClass} transition-transform" id="icon-${year}"></i>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(yearHeader);
+
+                // Cabeçalho de colunas inserido em cada exercício (Congelado logo abaixo do Ano)
+                const colHeader = document.createElement('tr');
+                colHeader.className = `row-year-${year} text-xs uppercase text-ita-yellow ${expandedState[year] ? '' : 'hidden'}`;
+                
+                // Classes de congelamento (sticky top-[48px] garante que fica exatamente debaixo da linha do ano que tem h-12/48px)
+                const thClass = "px-6 py-4 font-bold sticky top-[48px] z-10 bg-ita-black shadow-md";
+
+                colHeader.innerHTML = `
+                    <th scope="col" class="${thClass} text-left">Mês de Referência</th>
+                    <th scope="col" class="${thClass} text-right">Receita Prevista (R$)</th>
+                    <th scope="col" class="${thClass} text-right">Receita Realizada (R$)</th>
+                    <th scope="col" class="${thClass} text-right">Diferença (R$)</th>
+                    <th scope="col" class="${thClass} text-center">Data do Recebimento</th>
+                `;
+                tableBody.appendChild(colHeader);
+
+                let yearExpected = 0;
+                let yearRealized = 0;
+
+                // Linhas dos Meses
+                groupedData[year].forEach((row, index) => {
+                    yearExpected += row.expected;
+                    yearRealized += row.realized;
+                    const diff = row.realized - row.expected;
+                    const diffColorClass = diff < 0 ? 'text-red-600 font-medium' : (diff > 0 ? 'text-green-600 font-medium' : '');
+                    
+                    const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+
+                    const tr = document.createElement('tr');
+                    // Adicionada a classe row-year-${year} para controle de visibilidade
+                    tr.className = `row-year-${year} ${bgClass} border-b hover:bg-yellow-50 transition-colors ${expandedState[year] ? '' : 'hidden'}`;
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 font-medium pl-10"><i class="fas fa-angle-right text-gray-300 mr-2"></i> ${row.month}</td>
+                        <td class="px-6 py-4 text-right">${formatCurrency(row.expected)}</td>
+                        <td class="px-6 py-4 text-right font-semibold text-ita-black">${formatCurrency(row.realized)}</td>
+                        <td class="px-6 py-4 text-right ${diffColorClass}">${diff > 0 ? '+' : ''}${formatCurrency(diff)}</td>
+                        <td class="px-6 py-4 text-center text-gray-600">${row.date}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                // Subtotal do Ano (NOVO)
+                const yearDiff = yearRealized - yearExpected;
+                const yearDiffColorClass = yearDiff < 0 ? 'text-red-600' : (yearDiff > 0 ? 'text-green-600' : '');
+                
+                const subtotalTr = document.createElement('tr');
+                subtotalTr.className = `row-year-${year} bg-gray-200 font-bold border-b-2 border-gray-400 ${expandedState[year] ? '' : 'hidden'}`;
+                subtotalTr.innerHTML = `
+                    <td class="px-6 py-4 text-right uppercase text-xs text-ita-gray-dark">Total de ${year}:</td>
+                    <td class="px-6 py-4 text-right">${formatCurrency(yearExpected)}</td>
+                    <td class="px-6 py-4 text-right">${formatCurrency(yearRealized)}</td>
+                    <td class="px-6 py-4 text-right ${yearDiffColorClass}">${yearDiff > 0 ? '+' : ''}${formatCurrency(yearDiff)}</td>
+                    <td class="px-6 py-4 text-center">-</td>
+                `;
+                tableBody.appendChild(subtotalTr);
+            });
+        }
+
+        // Nova função para alternar visibilidade das linhas de um ano
+        function toggleYear(year) {
+            expandedState[year] = !expandedState[year];
+            const rows = document.querySelectorAll(`.row-year-${year}`);
+            const icon = document.getElementById(`icon-${year}`);
+            
+            if (expandedState[year]) {
+                rows.forEach(row => row.classList.remove('hidden'));
+                icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+            } else {
+                rows.forEach(row => row.classList.add('hidden'));
+                icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
+            }
+        }
+
+        // Função para filtrar os dados
+        function applyFilters() {
+            const yearFilter = document.getElementById('yearFilter').value;
+            const monthFilter = document.getElementById('monthFilter').value;
+
+            currentFilteredData = db.filter(item => {
+                const matchYear = yearFilter === 'all' || item.year.toString() === yearFilter;
+                const matchMonth = monthFilter === 'all' || item.month === monthFilter;
+                return matchYear && matchMonth;
+            });
+
+            renderTable();
+        }
+
+        // Função para exportar os dados em formato editável/estruturado (.CSV)
+        function exportToCSV() {
+            if(currentFilteredData.length === 0) {
+                alert("Não há dados para exportar com os filtros atuais.");
+                return;
+            }
+
+            // Cabeçalhos (Acentuação requer BOM para abrir direito no Excel PT-BR/PT-PT)
+            let csvContent = '\uFEFF'; 
+            csvContent += "Ano;Mês de Referência;Receita Prevista (R$);Receita Realizada (R$);Diferença (R$);Data do Recebimento\n";
+
+            // Dados
+            currentFilteredData.forEach(row => {
+                const diff = row.realized - row.expected;
+                
+                // Substituir ponto por vírgula para formatação padrão numérica em Português
+                const expectedStr = row.expected.toFixed(2).replace('.', ',');
+                const realizedStr = row.realized.toFixed(2).replace('.', ',');
+                const diffStr = diff.toFixed(2).replace('.', ',');
+
+                csvContent += `${row.year};${row.month};"${expectedStr}";"${realizedStr}";"${diffStr}";${row.date}\n`;
+            });
+
+            // Criar o ficheiro e iniciar a transferência
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", "transparencia_receitas_itabuna.csv");
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Event Listeners para os filtros
+        document.getElementById('yearFilter').addEventListener('change', applyFilters);
+        document.getElementById('monthFilter').addEventListener('change', applyFilters);
+
+        // Inicialização
+        window.onload = () => {
+            currentFilteredData = [...db];
+            renderTable();
+        };
+
+    </script>
+</body>
+</html>
