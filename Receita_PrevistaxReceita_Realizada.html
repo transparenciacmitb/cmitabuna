@@ -54,12 +54,12 @@
     <!-- Conteúdo Principal -->
     <main class="container mx-auto px-4 py-8 flex-grow">
         
-        <!-- Caminho do Site (Breadcrumbs) -->
-        <nav class="flex text-sm text-ita-gray-dark mb-6" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-2">
-                <li class="inline-flex items-center">
-                    <a href="https://cmitabuna-ba.portaltp.com.br/" target="_blank" class="inline-flex items-center hover:text-ita-black hover:underline transition-colors">
-                        <i class="fas fa-home mr-2"></i>
+        <!-- Header da Página: Caminho do Site e Atualização -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <!-- Caminho do Site (Breadcrumbs) -->
+            <nav class="flex text-sm text-ita-gray-dark" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                    <li class="inline-flex items-center">
                         Portal
                     </a>
                 </li>
@@ -76,7 +76,13 @@
                     </div>
                 </li>
             </ol>
-        </nav>
+            </nav>
+
+            <!-- Botão de Atualização -->
+            <button type="button" class="bg-ita-yellow text-ita-black font-bold py-2.5 px-6 text-sm rounded shadow cursor-default flex items-center gap-2" title="Data da última atualização dos dados">
+                <i class="fas fa-calendar-check"></i> Atualizado em 27/05/2026
+            </button>
+        </div>
 
         <!-- Painel de Controlo (Filtros e Exportação) -->
         <div class="bg-ita-white rounded-lg shadow-md p-6 mb-6 border border-gray-200">
@@ -153,6 +159,14 @@
             { year: 2026, month: 'Fevereiro', expected: 2605733.90, realized: 2491071.88, date: '10/02/2026' },
             { year: 2026, month: 'Março', expected: 2605733.90, realized: 2491071.88, date: '10/03/2026' },
             { year: 2026, month: 'Abril', expected: 2605733.90, realized: 2491071.88, date: '13/04/2026' },
+            { year: 2026, month: 'Maio', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Junho', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Julho', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Agosto', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Setembro', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Outubro', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Novembro', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Dezembro', expected: 2605733.90, realized: 0, date: '-' },
 
             // EXERCÍCIO 2025
             { year: 2025, month: 'Janeiro', expected: 2482980.66, realized: 2482554.20, date: '14/01/2025' },
@@ -276,8 +290,18 @@
                 groupedData[year].forEach((row, index) => {
                     yearExpected += row.expected;
                     yearRealized += row.realized;
-                    const diff = row.realized - row.expected;
-                    const diffColorClass = diff < 0 ? 'text-red-600 font-medium' : (diff > 0 ? 'text-green-600 font-medium' : '');
+                    
+                    let diffDisplay = '';
+                    let diffColorClass = '';
+                    
+                    // Lógica para excluir o valor da diferença e receita realizada em meses futuros (onde date é '-')
+                    if (row.date === '-') {
+                        diffDisplay = '-';
+                    } else {
+                        const diff = row.realized - row.expected;
+                        diffColorClass = diff < 0 ? 'text-red-600 font-medium' : (diff > 0 ? 'text-green-600 font-medium' : '');
+                        diffDisplay = `${diff > 0 ? '+' : ''}${formatCurrency(diff)}`;
+                    }
                     
                     const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
 
@@ -287,8 +311,8 @@
                     tr.innerHTML = `
                         <td class="px-6 py-4 font-medium pl-10"><i class="fas fa-angle-right text-gray-300 mr-2"></i> ${row.month}</td>
                         <td class="px-6 py-4 text-right">${formatCurrency(row.expected)}</td>
-                        <td class="px-6 py-4 text-right font-semibold text-ita-black">${formatCurrency(row.realized)}</td>
-                        <td class="px-6 py-4 text-right ${diffColorClass}">${diff > 0 ? '+' : ''}${formatCurrency(diff)}</td>
+                        <td class="px-6 py-4 text-right font-semibold text-ita-black">${row.date === '-' ? '-' : formatCurrency(row.realized)}</td>
+                        <td class="px-6 py-4 text-right ${diffColorClass}">${diffDisplay}</td>
                         <td class="px-6 py-4 text-center text-gray-600">${row.date}</td>
                     `;
                     tableBody.appendChild(tr);
@@ -353,12 +377,19 @@
 
             // Dados
             currentFilteredData.forEach(row => {
-                const diff = row.realized - row.expected;
-                
-                // Substituir ponto por vírgula para formatação padrão numérica em Português
                 const expectedStr = row.expected.toFixed(2).replace('.', ',');
-                const realizedStr = row.realized.toFixed(2).replace('.', ',');
-                const diffStr = diff.toFixed(2).replace('.', ',');
+                let realizedStr = '';
+                let diffStr = '';
+                
+                // Tratar meses sem repasse na exportação
+                if (row.date === '-') {
+                    realizedStr = '-';
+                    diffStr = '-';
+                } else {
+                    const diff = row.realized - row.expected;
+                    realizedStr = row.realized.toFixed(2).replace('.', ',');
+                    diffStr = diff.toFixed(2).replace('.', ',');
+                }
 
                 csvContent += `${row.year};${row.month};"${expectedStr}";"${realizedStr}";"${diffStr}";${row.date}\n`;
             });
