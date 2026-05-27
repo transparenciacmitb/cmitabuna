@@ -64,7 +64,7 @@
                     <h1 class="text-2xl font-bold text-gray-900">Demonstrativo da Execução da Despesa</h1>
                     <h2 class="text-lg font-medium text-gray-600 mt-1">Câmara Municipal de Vereadores de Itabuna - BA</h2>
                     <p class="text-sm text-gray-500 mt-2">
-                        CNPJ: 13.235.726/0001-55 | <span class="font-bold" style="color: #4169e1;">Atualizado em 30/04/2026</span>
+                        CNPJ: 13.235.726/0001-55 | <span class="font-bold" style="color: #4169e1;">Atualizado em 27/05/2026</span>
                     </p>
                 </div>
             </div>
@@ -133,7 +133,7 @@
     </div>
 
     <script>
-        // Base de dados estruturada a partir dos PDFs (Incluindo todos os meses de 2026, 2025 a 2022)
+        // Base de dados estruturada a partir dos PDFs (Incluindo Dotação Atualizada)
         const dadosDespesas = [
             {
                 ano: "2026",
@@ -141,49 +141,49 @@
                     {
                         mes: "Abril",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "417.649,61", empAte: "1.830.406,37", liqMes: "81.836,17", liqAte: "322.901,80", pagoMes: "88.996,17", pagoAte: "321.201,80", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "0,00", empAte: "25.285.641,68", liqMes: "2.024.534,29", liqAte: "7.689.861,67", pagoMes: "2.024.534,29", pagoAte: "7.689.861,67", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "0,00", empAte: "28.314,40", liqMes: "0,00", liqAte: "8.397,89", pagoMes: "0,00", pagoAte: "8.397,89", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "417.649,61", empAte: "27.144.362,45", liqMes: "2.106.370,46", liqAte: "8.021.161,36", pagoMes: "2.113.530,46", pagoAte: "8.019.461,36", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "417.649,61", empAte: "27.150.630,75", liqMes: "2.106.370,46", liqAte: "8.021.161,36", pagoMes: "2.113.530,46", pagoAte: "8.019.461,36", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "128.000,00", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.665.000,00", empMes: "417.649,61", empAte: "1.830.406,37", liqMes: "81.836,17", liqAte: "322.901,80", pagoMes: "88.996,17", pagoAte: "321.201,80", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "0,00", empAte: "25.285.641,68", liqMes: "2.024.534,29", liqAte: "7.689.861,67", pagoMes: "2.024.534,29", pagoAte: "7.689.861,67", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "0,00", empAte: "28.314,40", liqMes: "0,00", liqAte: "8.397,89", pagoMes: "0,00", pagoAte: "8.397,89", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.802.836,85", empMes: "417.649,61", empAte: "27.144.362,45", liqMes: "2.106.370,46", liqAte: "8.021.161,36", pagoMes: "2.113.530,46", pagoAte: "8.019.461,36", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "178.000,00", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "417.649,61", empAte: "27.150.630,75", liqMes: "2.106.370,46", liqAte: "8.021.161,36", pagoMes: "2.113.530,46", pagoAte: "8.019.461,36", tipo: "total" }
                         ]
                     },
                     {
                         mes: "Março",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "66.802,54", empAte: "1.412.756,76", liqMes: "114.185,36", liqAte: "241.065,63", pagoMes: "105.325,36", pagoAte: "232.205,63", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "0,00", empAte: "25.285.641,68", liqMes: "1.991.076,77", liqAte: "5.665.327,38", pagoMes: "1.991.076,77", pagoAte: "5.665.327,38", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "28.314,40", empAte: "28.314,40", liqMes: "8.397,89", liqAte: "8.397,89", pagoMes: "8.397,89", pagoAte: "8.397,89", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "95.116,94", empAte: "26.726.712,84", liqMes: "2.113.660,02", liqAte: "5.914.790,90", pagoMes: "2.104.800,02", pagoAte: "5.905.930,90", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "95.116,94", empAte: "26.732.981,14", liqMes: "2.113.660,02", liqAte: "5.914.790,90", pagoMes: "2.104.800,02", pagoAte: "5.905.930,90", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "128.000,00", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.665.000,00", empMes: "66.802,54", empAte: "1.412.756,76", liqMes: "114.185,36", liqAte: "241.065,63", pagoMes: "105.325,36", pagoAte: "232.205,63", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "0,00", empAte: "25.285.641,68", liqMes: "1.991.076,77", liqAte: "5.665.327,38", pagoMes: "1.991.076,77", pagoAte: "5.665.327,38", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "28.314,40", empAte: "28.314,40", liqMes: "8.397,89", liqAte: "8.397,89", pagoMes: "8.397,89", pagoAte: "8.397,89", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.802.836,85", empMes: "95.116,94", empAte: "26.726.712,84", liqMes: "2.113.660,02", liqAte: "5.914.790,90", pagoMes: "2.104.800,02", pagoAte: "5.905.930,90", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "178.000,00", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "95.116,94", empAte: "26.732.981,14", liqMes: "2.113.660,02", liqAte: "5.914.790,90", pagoMes: "2.104.800,02", pagoAte: "5.905.930,90", tipo: "total" }
                         ]
                     },
                     {
                         mes: "Fevereiro",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "52.885,04", empAte: "1.345.954,22", liqMes: "89.617,95", liqAte: "126.880,27", pagoMes: "95.834,62", pagoAte: "126.880,27", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "0,00", empAte: "25.285.641,68", liqMes: "2.131.126,63", liqAte: "3.674.250,61", pagoMes: "2.131.126,63", pagoAte: "3.674.250,61", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "0,00", empAte: "0,00", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "52.885,04", empAte: "26.631.595,90", liqMes: "2.220.744,58", liqAte: "3.801.130,88", pagoMes: "2.226.961,25", pagoAte: "3.801.130,88", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "52.885,04", empAte: "26.637.864,20", liqMes: "2.220.744,58", liqAte: "3.801.130,88", pagoMes: "2.226.961,25", pagoAte: "3.801.130,88", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "128.000,00", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.665.000,00", empMes: "52.885,04", empAte: "1.345.954,22", liqMes: "89.617,95", liqAte: "126.880,27", pagoMes: "95.834,62", pagoAte: "126.880,27", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "0,00", empAte: "25.285.641,68", liqMes: "2.131.126,63", liqAte: "3.674.250,61", pagoMes: "2.131.126,63", pagoAte: "3.674.250,61", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "0,00", empAte: "0,00", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.802.836,85", empMes: "52.885,04", empAte: "26.631.595,90", liqMes: "2.220.744,58", liqAte: "3.801.130,88", pagoMes: "2.226.961,25", pagoAte: "3.801.130,88", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "178.000,00", empMes: "0,00", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "52.885,04", empAte: "26.637.864,20", liqMes: "2.220.744,58", liqAte: "3.801.130,88", pagoMes: "2.226.961,25", pagoAte: "3.801.130,88", tipo: "total" }
                         ]
                     },
                     {
                         mes: "Janeiro",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "6.268,30", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "1.293.069,18", empAte: "1.293.069,18", liqMes: "37.262,32", liqAte: "37.262,32", pagoMes: "31.045,65", pagoAte: "31.045,65", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "25.285.641,68", empAte: "25.285.641,68", liqMes: "1.543.123,98", liqAte: "1.543.123,98", pagoMes: "1.543.123,98", pagoAte: "1.543.123,98", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "0,00", empAte: "0,00", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "26.578.710,86", empAte: "26.578.710,86", liqMes: "1.580.386,30", liqAte: "1.580.386,30", pagoMes: "1.574.169,63", pagoAte: "1.574.169,63", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "6.268,30", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "26.584.979,16", empAte: "26.584.979,16", liqMes: "1.580.386,30", liqAte: "1.580.386,30", pagoMes: "1.574.169,63", pagoAte: "1.574.169,63", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "128.000,00", empMes: "6.268,30", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.665.000,00", empMes: "1.293.069,18", empAte: "1.293.069,18", liqMes: "37.262,32", liqAte: "37.262,32", pagoMes: "31.045,65", pagoAte: "31.045,65", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "25.285.641,68", empAte: "25.285.641,68", liqMes: "1.543.123,98", liqAte: "1.543.123,98", pagoMes: "1.543.123,98", pagoAte: "1.543.123,98", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "0,00", empAte: "0,00", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.802.836,85", empMes: "26.578.710,86", empAte: "26.578.710,86", liqMes: "1.580.386,30", liqAte: "1.580.386,30", pagoMes: "1.574.169,63", pagoAte: "1.574.169,63", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "178.000,00", empMes: "6.268,30", empAte: "6.268,30", liqMes: "0,00", liqAte: "0,00", pagoMes: "0,00", pagoAte: "0,00", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "26.584.979,16", empAte: "26.584.979,16", liqMes: "1.580.386,30", liqAte: "1.580.386,30", pagoMes: "1.574.169,63", pagoAte: "1.574.169,63", tipo: "total" }
                         ]
                     }
                 ]
@@ -194,13 +194,13 @@
                     {
                         mes: "Dezembro",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "21.991,00", empAte: "77.928,00", liqMes: "21.991,00", liqAte: "63.698,00", pagoMes: "21.991,00", pagoAte: "63.698,00", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "-399.164,13", empAte: "2.169.459,22", liqMes: "317.163,33", liqAte: "2.007.837,66", pagoMes: "316.163,93", pagoAte: "2.006.838,26", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "587.584,25", empAte: "24.857.338,08", liqMes: "3.600.409,24", liqAte: "24.811.375,74", pagoMes: "3.402.425,55", pagoAte: "24.613.392,05", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "3.941,71", empAte: "22.369,57", liqMes: "0,00", liqAte: "22.369,57", pagoMes: "0,00", pagoAte: "22.369,57", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "183.253,41", empAte: "27.049.166,87", liqMes: "3.920.569,57", liqAte: "26.841.582,97", pagoMes: "3.721.586,48", pagoAte: "26.642.599,88", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "21.991,00", empAte: "77.928,00", liqMes: "21.991,00", liqAte: "63.698,00", pagoMes: "21.991,00", pagoAte: "63.698,00", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "205.244,41", empAte: "27.127.094,87", liqMes: "3.942.560,57", liqAte: "26.905.280,97", pagoMes: "3.743.577,48", pagoAte: "26.706.297,88", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "103.000,00", empMes: "21.991,00", empAte: "77.928,00", liqMes: "21.991,00", liqAte: "63.698,00", pagoMes: "21.991,00", pagoAte: "63.698,00", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.877.000,00", empMes: "-399.164,13", empAte: "2.169.459,22", liqMes: "317.163,33", liqAte: "2.007.837,66", pagoMes: "316.163,93", pagoAte: "2.006.838,26", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.498.850,14", empMes: "587.584,25", empAte: "24.857.338,08", liqMes: "3.600.409,24", liqAte: "24.811.375,74", pagoMes: "3.402.425,55", pagoAte: "24.613.392,05", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "305.000,00", empMes: "3.941,71", empAte: "22.369,57", liqMes: "0,00", liqAte: "22.369,57", pagoMes: "0,00", pagoAte: "22.369,57", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.880.850,14", empMes: "183.253,41", empAte: "27.049.166,87", liqMes: "3.920.569,57", liqAte: "26.841.582,97", pagoMes: "3.721.586,48", pagoAte: "26.642.599,88", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "103.000,00", empMes: "21.991,00", empAte: "77.928,00", liqMes: "21.991,00", liqAte: "63.698,00", pagoMes: "21.991,00", pagoAte: "63.698,00", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.783.850,14", empMes: "205.244,41", empAte: "27.127.094,87", liqMes: "3.942.560,57", liqAte: "26.905.280,97", pagoMes: "3.743.577,48", pagoAte: "26.706.297,88", tipo: "total" }
                         ]
                     }
                 ]
@@ -211,13 +211,13 @@
                     {
                         mes: "Dezembro",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "33.744,00", empAte: "74.647,62", liqMes: "33.744,00", liqAte: "74.647,62", pagoMes: "0,00", pagoAte: "40.903,62", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "17.185,42", empAte: "3.264.662,18", liqMes: "70.292,70", liqAte: "3.094.103,46", pagoMes: "70.292,70", pagoAte: "3.060.031,64", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "27.449,98", empAte: "21.366.693,74", liqMes: "25.122,87", liqAte: "21.366.693,74", pagoMes: "19.316,64", pagoAte: "21.339.440,41", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "168.750,00", empAte: "187.711,88", liqMes: "170.840,00", liqAte: "187.711,88", pagoMes: "170.840,00", pagoAte: "187.711,88", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "1.027.004,88", empAte: "24.819.067,80", liqMes: "3.845.217,15", liqAte: "24.648.509,08", pagoMes: "3.785.996,55", pagoAte: "24.587.183,93", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "33.744,00", empAte: "74.647,62", liqMes: "33.744,00", liqAte: "74.647,62", pagoMes: "0,00", pagoAte: "40.903,62", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "1.060.748,88", empAte: "24.893.715,42", liqMes: "3.878.961,15", liqAte: "24.723.156,70", pagoMes: "3.785.996,55", pagoAte: "24.628.087,55", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "130.000,00", empMes: "33.744,00", empAte: "74.647,62", liqMes: "33.744,00", liqAte: "74.647,62", pagoMes: "0,00", pagoAte: "40.903,62", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.698.000,72", empMes: "17.185,42", empAte: "3.264.662,18", liqMes: "70.292,70", liqAte: "3.094.103,46", pagoMes: "70.292,70", pagoAte: "3.060.031,64", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "21.885.294,00", empMes: "27.449,98", empAte: "21.366.693,74", liqMes: "25.122,87", liqAte: "21.366.693,74", pagoMes: "19.316,64", pagoAte: "21.339.440,41", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "259.000,00", empMes: "168.750,00", empAte: "187.711,88", liqMes: "170.840,00", liqAte: "187.711,88", pagoMes: "170.840,00", pagoAte: "187.711,88", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "25.822.294,72", empMes: "1.027.004,88", empAte: "24.819.067,80", liqMes: "3.845.217,15", liqAte: "24.648.509,08", pagoMes: "3.785.996,55", pagoAte: "24.587.183,93", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "130.000,00", empMes: "33.744,00", empAte: "74.647,62", liqMes: "33.744,00", liqAte: "74.647,62", pagoMes: "0,00", pagoAte: "40.903,62", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "25.952.294,72", empMes: "1.060.748,88", empAte: "24.893.715,42", liqMes: "3.878.961,15", liqAte: "24.723.156,70", pagoMes: "3.785.996,55", pagoAte: "24.628.087,55", tipo: "total" }
                         ]
                     }
                 ]
@@ -228,13 +228,13 @@
                     {
                         mes: "Dezembro",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "16.925,00", empAte: "2.950.148,24", liqMes: "0,00", liqAte: "2.885.349,41", pagoMes: "0,00", pagoAte: "2.885.349,41", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "8.034,67", empAte: "2.937.733,41", liqMes: "72.464,52", liqAte: "2.728.247,41", pagoMes: "72.464,52", pagoAte: "2.727.283,36", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "5.120,22", empAte: "18.502.623,91", liqMes: "38.986,80", liqAte: "18.487.545,81", pagoMes: "21.443,89", pagoAte: "18.043.788,95", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "0,00", empAte: "66.260,06", liqMes: "0,00", liqAte: "66.260,06", pagoMes: "0,00", pagoAte: "66.260,06", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "-12.658,06", empAte: "21.506.617,38", liqMes: "2.374.729,54", liqAte: "21.282.053,28", pagoMes: "2.614.126,97", pagoAte: "20.837.332,37", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "16.925,00", empAte: "2.950.148,24", liqMes: "0,00", liqAte: "2.885.349,41", pagoMes: "0,00", pagoAte: "2.885.349,41", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "4.266,94", empAte: "24.456.765,62", liqMes: "2.374.729,54", liqAte: "24.167.402,69", pagoMes: "2.614.126,97", pagoAte: "23.722.681,78", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "2.958.291,25", empMes: "16.925,00", empAte: "2.950.148,24", liqMes: "0,00", liqAte: "2.885.349,41", pagoMes: "0,00", pagoAte: "2.885.349,41", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.016.730,64", empMes: "8.034,67", empAte: "2.937.733,41", liqMes: "72.464,52", liqAte: "2.728.247,41", pagoMes: "72.464,52", pagoAte: "2.727.283,36", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "18.653.000,00", empMes: "5.120,22", empAte: "18.502.623,91", liqMes: "38.986,80", liqAte: "18.487.545,81", pagoMes: "21.443,89", pagoAte: "18.043.788,95", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "66.382,66", empMes: "0,00", empAte: "66.260,06", liqMes: "0,00", liqAte: "66.260,06", pagoMes: "0,00", pagoAte: "66.260,06", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "21.736.113,30", empMes: "-12.658,06", empAte: "21.506.617,38", liqMes: "2.374.729,54", liqAte: "21.282.053,28", pagoMes: "2.614.126,97", pagoAte: "20.837.332,37", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "2.958.291,25", empMes: "16.925,00", empAte: "2.950.148,24", liqMes: "0,00", liqAte: "2.885.349,41", pagoMes: "0,00", pagoAte: "2.885.349,41", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "24.694.404,55", empMes: "4.266,94", empAte: "24.456.765,62", liqMes: "2.374.729,54", liqAte: "24.167.402,69", pagoMes: "2.614.126,97", pagoAte: "23.722.681,78", tipo: "total" }
                         ]
                     }
                 ]
@@ -245,13 +245,13 @@
                     {
                         mes: "Dezembro",
                         linhas: [
-                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", empMes: "14.360,00", empAte: "1.096.299,67", liqMes: "102.126,24", liqAte: "1.184.065,91", pagoMes: "19.528,00", pagoAte: "101.613,95", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", empMes: "2.421,40", empAte: "2.294.601,77", liqMes: "76.573,05", liqAte: "2.159.278,37", pagoMes: "74.498,05", pagoAte: "2.144.605,17", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", empMes: "981.839,47", empAte: "15.565.726,89", liqMes: "2.222.231,52", liqAte: "15.565.726,89", pagoMes: "1.996.300,58", pagoAte: "15.339.795,95", tipo: "detalhe" },
-                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", empMes: "0,00", empAte: "5.475,00", liqMes: "0,00", liqAte: "5.475,00", pagoMes: "0,00", pagoAte: "5.475,00", tipo: "detalhe" },
-                            { descricao: "DESPESAS CORRENTES", empMes: "930.610,96", empAte: "17.865.803,66", liqMes: "2.558.342,80", liqAte: "17.730.480,26", pagoMes: "2.335.737,81", pagoAte: "17.489.876,12", tipo: "subtotal" },
-                            { descricao: "DESPESAS DE CAPITAL", empMes: "1.096.299,67", empAte: "1.184.065,91", liqMes: "19.528,00", liqAte: "101.613,95", pagoMes: "19.528,00", pagoAte: "101.613,95", tipo: "subtotal" },
-                            { descricao: "TOTAL GERAL", empMes: "2.026.910,63", empAte: "19.049.869,57", liqMes: "2.577.870,80", liqAte: "17.832.004,21", pagoMes: "2.355.265,81", pagoAte: "17.591.490,07", tipo: "total" }
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "1.184.065,91", empMes: "14.360,00", empAte: "1.096.299,67", liqMes: "102.126,24", liqAte: "1.184.065,91", pagoMes: "19.528,00", pagoAte: "101.613,95", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "2.294.601,77", empMes: "2.421,40", empAte: "2.294.601,77", liqMes: "76.573,05", liqAte: "2.159.278,37", pagoMes: "74.498,05", pagoAte: "2.144.605,17", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "15.565.726,89", empMes: "981.839,47", empAte: "15.565.726,89", liqMes: "2.222.231,52", liqAte: "15.565.726,89", pagoMes: "1.996.300,58", pagoAte: "15.339.795,95", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "5.475,00", empMes: "0,00", empAte: "5.475,00", liqMes: "0,00", liqAte: "5.475,00", pagoMes: "0,00", pagoAte: "5.475,00", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "17.865.803,66", empMes: "930.610,96", empAte: "17.865.803,66", liqMes: "2.558.342,80", liqAte: "17.730.480,26", pagoMes: "2.335.737,81", pagoAte: "17.489.876,12", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "1.184.065,91", empMes: "1.096.299,67", empAte: "1.184.065,91", liqMes: "19.528,00", liqAte: "101.613,95", pagoMes: "19.528,00", pagoAte: "101.613,95", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "19.049.869,57", empMes: "2.026.910,63", empAte: "19.049.869,57", liqMes: "2.577.870,80", liqAte: "17.832.004,21", pagoMes: "2.355.265,81", pagoAte: "17.591.490,07", tipo: "total" }
                         ]
                     }
                 ]
@@ -296,6 +296,7 @@
                         return `
                             <tr class="${classes}">
                                 <td class="${linha.tipo === 'total' ? 'text-left font-bold uppercase' : ''}">${linha.descricao}</td>
+                                <td class="text-gray-900 font-medium">${linha.dotacaoAtualizada}</td>
                                 <td class="text-blue-900">${linha.empMes}</td>
                                 <td class="text-blue-900">${linha.empAte}</td>
                                 <td class="text-green-900">${linha.liqMes}</td>
@@ -320,6 +321,7 @@
                                     <thead class="table-header">
                                         <tr>
                                             <th rowspan="2" class="align-middle border-b-2">Descrição da Despesa</th>
+                                            <th rowspan="2" class="align-middle border-b-2 text-center bg-gray-100 border-gray-200">Dotação Atualizada (R$)</th>
                                             <th colspan="2" class="text-center bg-blue-50 border-blue-100">Empenhado (R$)</th>
                                             <th colspan="2" class="text-center bg-green-50 border-green-100">Liquidado (R$)</th>
                                             <th colspan="2" class="text-center bg-purple-50 border-purple-100">Pago (R$)</th>
@@ -375,8 +377,8 @@
             const filtroAno = document.getElementById('filtroAno').value;
             const filtroMes = document.getElementById('filtroMes').value;
             
-            // Cabeçalho do Arquivo CSV
-            let csvContent = "Exercicio;Periodo;Descricao_Despesa;Empenhado_No_Mes;Empenhado_Ate_Mes;Liquidado_No_Mes;Liquidado_Ate_Mes;Pago_No_Mes;Pago_Ate_Mes\n";
+            // Cabeçalho do Arquivo CSV (Incluindo a nova coluna)
+            let csvContent = "Exercicio;Periodo;Descricao_Despesa;Dotacao_Atualizada;Empenhado_No_Mes;Empenhado_Ate_Mes;Liquidado_No_Mes;Liquidado_Ate_Mes;Pago_No_Mes;Pago_Ate_Mes\n";
 
             dadosDespesas.forEach(dadoAno => {
                 // Filtra o ano
@@ -391,7 +393,7 @@
                         let descricaoTratada = linha.descricao.replace(/;/g, ',');
                         
                         // Monta a linha utilizando delimitador ponto e vírgula e colocando dados entre aspas
-                        csvContent += `"${dadoAno.ano}";"${dadoMes.mes}";"${descricaoTratada}";"${linha.empMes}";"${linha.empAte}";"${linha.liqMes}";"${linha.liqAte}";"${linha.pagoMes}";"${linha.pagoAte}"\n`;
+                        csvContent += `"${dadoAno.ano}";"${dadoMes.mes}";"${descricaoTratada}";"${linha.dotacaoAtualizada}";"${linha.empMes}";"${linha.empAte}";"${linha.liqMes}";"${linha.liqAte}";"${linha.pagoMes}";"${linha.pagoAte}"\n`;
                     });
                 });
             });
