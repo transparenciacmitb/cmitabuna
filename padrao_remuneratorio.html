@@ -70,6 +70,13 @@
                 box-shadow: none !important;
                 border: 1px solid #d1d5db !important;
             }
+            /* Garantir que as tabelas aparecem todas na impressão */
+            .print-expand {
+                display: block !important;
+            }
+            .print-hide-icon {
+                display: none !important;
+            }
         }
         /* Barra de rolagem personalizada */
         ::-webkit-scrollbar {
@@ -413,7 +420,7 @@
             document.getElementById('stat-min-title').innerText = minJob.cargo;
         }
 
-        // Renderizar todas as tabelas na tela
+        // Renderizar todas as tabelas na tela com efeito sanfona (accordion)
         function renderTables() {
             const container = document.getElementById('tables-container');
             container.innerHTML = ''; // Limpar antes de renderizar
@@ -427,12 +434,12 @@
 
                 // Gerar a Tabela HTML
                 const tableSection = document.createElement('section');
-                tableSection.className = "bg-white rounded-2xl shadow-sm border border-itabuna-gray-200 overflow-hidden";
+                tableSection.className = "bg-white rounded-2xl shadow-sm border border-itabuna-gray-200 overflow-hidden mb-8";
                 
                 tableSection.innerHTML = `
-                    <div class="bg-itabuna-black text-white px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-4 border-itabuna-yellow-500">
+                    <div onclick="toggleSection('${catKey}')" class="bg-itabuna-black text-white px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-4 border-itabuna-yellow-500 cursor-pointer hover:bg-neutral-900 transition-colors select-none group">
                         <div class="flex items-center gap-3">
-                            <div class="bg-itabuna-yellow-500 p-2 rounded-lg text-itabuna-black">
+                            <div class="bg-itabuna-yellow-500 p-2 rounded-lg text-itabuna-black group-hover:bg-itabuna-yellow-400 transition-colors">
                                 <i data-lucide="${group.icon}" class="w-5 h-5"></i>
                             </div>
                             <div>
@@ -440,11 +447,16 @@
                                 <p class="text-xs text-itabuna-gray-300 font-mono">${group.law}</p>
                             </div>
                         </div>
-                        <span class="bg-itabuna-gray-800 text-itabuna-yellow-400 font-bold px-3 py-1 rounded-full text-xs self-start sm:self-center border border-itabuna-gray-700">
-                            ${items.length} Registos
-                        </span>
+                        <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto mt-2 sm:mt-0 gap-4">
+                            <span class="bg-itabuna-gray-800 text-itabuna-yellow-400 font-bold px-3 py-1 rounded-full text-xs self-start sm:self-center border border-itabuna-gray-700">
+                                ${items.length} Registos
+                            </span>
+                            <div id="icon-wrapper-${catKey}" class="print-hide-icon transform rotate-180 transition-transform duration-300 flex items-center justify-center bg-itabuna-gray-800 p-1.5 rounded-full border border-itabuna-gray-700 group-hover:border-itabuna-yellow-500 text-itabuna-gray-300 group-hover:text-itabuna-yellow-400">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div id="table-${catKey}" class="print-expand overflow-x-auto transition-all duration-300 ease-in-out">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-itabuna-gray-100 border-b border-itabuna-gray-200 text-itabuna-gray-700 text-xs font-bold uppercase tracking-wider">
@@ -461,7 +473,7 @@
                                         <td class="py-3.5 px-6 font-bold text-itabuna-black">${i.cargo}</td>
                                         <td class="py-3.5 px-6 text-right font-mono font-bold text-itabuna-black bg-itabuna-gray-100/50">${formatBRL(i.vencimento)}</td>
                                         <td class="py-3.5 px-6 text-center no-print">
-                                            <button onclick="showDetails('${catKey}', ${i.item})" class="bg-itabuna-gray-200 hover:bg-itabuna-yellow-500 hover:text-itabuna-black text-itabuna-gray-700 text-xs font-bold py-1 px-3 rounded-lg transition duration-150">
+                                            <button onclick="event.stopPropagation(); showDetails('${catKey}', ${i.item})" class="bg-itabuna-gray-200 hover:bg-itabuna-yellow-500 hover:text-itabuna-black text-itabuna-gray-700 text-xs font-bold py-1 px-3 rounded-lg transition duration-150 relative z-10">
                                                 Visualizar
                                             </button>
                                         </td>
@@ -477,6 +489,22 @@
 
             // Atualizar os ícones do Lucide
             lucide.createIcons();
+        }
+
+        // Função para Abrir/Fechar as seções (Accordion)
+        function toggleSection(catKey) {
+            const tableDiv = document.getElementById(`table-${catKey}`);
+            const iconWrapper = document.getElementById(`icon-wrapper-${catKey}`);
+            
+            if (tableDiv.classList.contains('hidden')) {
+                // Expandir
+                tableDiv.classList.remove('hidden');
+                iconWrapper.classList.add('rotate-180');
+            } else {
+                // Ocultar
+                tableDiv.classList.add('hidden');
+                iconWrapper.classList.remove('rotate-180');
+            }
         }
 
         // Função para mostrar Modal de Detalhes do Cargo
