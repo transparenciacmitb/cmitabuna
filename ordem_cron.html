@@ -49,12 +49,11 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-ita-yellow">Câmara Municipal de Vereadores de Itabuna</h1>
-                    <p class="text-sm text-gray-300">Ordem Cronológica dos Pagamentos | 01/01/2026 a 30/04/2026</p>
+                    <p class="text-sm text-gray-300">Ordem Cronológica dos Pagamentos</p>
                 </div>
             </div>
             <div class="text-right text-sm text-gray-400">
-                <p>CNPJ: 13.235.726/0001-55</p>
-                <p>Fonte: 15000000 - Rec. não Vinculados</p>
+                <!-- Informações de CNPJ e Fonte Removidas conforme solicitado -->
             </div>
         </div>
     </header>
@@ -64,6 +63,7 @@
         
         <!-- Controls & Filters Section -->
         <section class="bg-ita-white rounded-lg shadow-md p-6 border-l-4 border-ita-yellow">
+            <h2 class="text-2xl font-black text-ita-black uppercase tracking-wide mb-4">Ordem Cronológica de Pagamentos</h2>
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
                 
                 <!-- Filtros -->
@@ -429,12 +429,12 @@
             return new Date(`${ano}-${mes}-${dia}T00:00:00`);
         };
 
-        // Calcula a Data de Vencimento (2 dias APÓS o pagamento) e formatação segura da justificativa (Sempre vazia por restrição)
+        // Calcula a Data de Vencimento (2 dias APÓS o pagamento) e formatação segura da justificativa
         dadosOriginais.forEach(item => {
             const date = parseDateBR(item.data);
             date.setDate(date.getDate() + 2); // Somando 2 dias ao invés de subtrair
             item.vencimento = date.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit', year: 'numeric'});
-            item.justificativa = ""; // Forçando Justificativa Vazia
+            item.justificativa = "Não teve alteração de ordem neste caso"; // Justificativa padrão definida
         });
 
         let dadosFiltrados = [...dadosOriginais];
@@ -481,6 +481,18 @@
             return grouped;
         }
 
+        function toggleYearAccordion(year) {
+            const content = document.getElementById(`content-year-${year}`);
+            const icon = document.getElementById(`icon-year-${year}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-90');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-90');
+            }
+        }
+
         // Função de Renderização das Sanfonas
         function renderTable(dados) {
             accordionContainer.innerHTML = '';
@@ -509,17 +521,24 @@
                     });
                 });
 
+                // Cabeçalho Expansível do Ano
                 yearWrapper.innerHTML = `
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 border-b-4 border-ita-yellow pb-2 gap-4">
-                        <h2 class="text-2xl font-black text-ita-black uppercase tracking-wide">Exercício Financeiro: ${year}</h2>
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 border-b-4 border-ita-yellow pb-2 gap-4 cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors" onclick="toggleYearAccordion('${year}')">
+                        <div class="flex items-center gap-3">
+                            <i id="icon-year-${year}" class="ph ph-caret-right text-2xl text-ita-darkgray transition-transform duration-300"></i>
+                            <h2 class="text-2xl font-black text-ita-black uppercase tracking-wide">Exercício Financeiro: ${year}</h2>
+                            <button class="bg-ita-yellow text-ita-black font-bold text-xs px-3 py-1 rounded shadow cursor-default" onclick="event.stopPropagation()">Atualizado em 29/05/2026</button>
+                        </div>
                         <div class="flex gap-4 md:gap-6 font-bold text-sm md:text-base">
                             <span>Liq: <span class="text-ita-black">R$ ${formatBR(anoLiq)}</span></span>
-                            <span>Desc: <span class="text-red-600">R$ ${formatBR(anoDesc)}</span></span>
-                            <span>Pag: <span class="text-green-700">R$ ${formatBR(anoPag)}</span></span>
+                            <span>Descontos: <span class="text-red-600">R$ ${formatBR(anoDesc)}</span></span>
+                            <span>Pgto Líquido: <span class="text-green-700">R$ ${formatBR(anoPag)}</span></span>
                         </div>
                     </div>
+                    <div id="content-year-${year}" class="hidden flex flex-col gap-4"></div>
                 `;
                 
+                const monthsContainer = yearWrapper.querySelector(`#content-year-${year}`);
                 const monthsGroup = grouped[year];
                 const monthKeys = Object.keys(monthsGroup).sort(); // Mês crescente
 
@@ -554,14 +573,12 @@
                     monthData.forEach((item, index) => {
                         rowsHtml += `
                             <tr class="${index % 2 === 0 ? 'bg-white hover:bg-yellow-50' : 'bg-gray-50 hover:bg-yellow-100'} transition-colors cursor-default">
-                                <!-- Coluna Vencimento com texto verde na mesma tonalidade que a coluna Valor Pagamento (e sem negrito) -->
                                 <td class="px-4 py-3 border-b border-gray-200 text-green-700 font-normal">${item.vencimento}</td>
                                 <td class="px-4 py-3 border-b border-gray-200 text-ita-darkgray">${item.data}</td>
                                 <td class="px-4 py-3 border-b border-gray-200 font-medium">${item.empenho}</td>
                                 <td class="px-4 py-3 border-b border-gray-200">${item.processo}</td>
-                                <!-- Coluna CREDOR com quebra de linha ajustada -->
                                 <td class="px-4 py-3 border-b border-gray-200 min-w-[250px] max-w-[350px] whitespace-normal break-words leading-tight align-middle text-gray-900 font-semibold">${item.credor}</td>
-                                <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-600 align-middle"></td>
+                                <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-600 align-middle min-w-[200px] whitespace-normal break-words leading-tight">${item.justificativa}</td>
                                 <td class="px-4 py-3 border-b border-gray-200 text-right align-middle">${formatBR(item.vLiq)}</td>
                                 <td class="px-4 py-3 border-b border-gray-200 text-right text-red-500 align-middle">${formatBR(item.vDesc)}</td>
                                 <td class="px-4 py-3 border-b border-gray-200 text-right font-bold text-green-700 align-middle">${formatBR(item.vPag)}</td>
@@ -594,7 +611,7 @@
                             </div>
                         </div>
                     `;
-                    yearWrapper.appendChild(accItem);
+                    monthsContainer.appendChild(accItem);
                 });
                 
                 accordionContainer.appendChild(yearWrapper);
@@ -665,7 +682,7 @@
                     row.empenho, 
                     row.processo, 
                     `"${row.credor}"`, 
-                    `""`, 
+                    `"${row.justificativa}"`, 
                     row.vLiq.toString().replace('.', ','), 
                     row.vDesc.toString().replace('.', ','), 
                     row.vPag.toString().replace('.', ',')
@@ -694,7 +711,7 @@
                 "Empenho": row.empenho,
                 "Processo": row.processo,
                 "Credor": row.credor,
-                "Justificativa de Alteração da Ordem": "",
+                "Justificativa de Alteração da Ordem": row.justificativa,
                 "Vlr. Liquidação": row.vLiq,
                 "Vlr. Desconto": row.vDesc,
                 "Vlr. Pagamento": row.vPag
