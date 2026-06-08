@@ -24,6 +24,8 @@
     </script>
     <!-- FontAwesome para Ícones -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- SheetJS para Exportação XLSX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         /* Estilos adicionais para scrollbar e transições */
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -60,27 +62,26 @@
             <nav class="flex text-sm text-ita-gray-dark" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2">
                     <li class="inline-flex items-center">
-                        Portal
-                    </a>
-                </li>
-                <li>
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 text-xs mx-1 md:mx-2"></i>
-                        <a href="https://cmitabuna-ba.portaltp.com.br/consultas/receitas.aspx" target="_blank" class="hover:text-ita-black hover:underline transition-colors">Receita</a>
-                    </div>
-                </li>
-                <li aria-current="page">
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 text-xs mx-1 md:mx-2"></i>
-                        <a href="https://cmitabuna-ba.portaltp.com.br/consultas/documentos.aspx?id=809" target="_blank" class="text-ita-black font-semibold hover:underline">Receita Prevista x Receita Realizada</a>
-                    </div>
-                </li>
-            </ol>
+                        <a href="#" class="hover:text-ita-black hover:underline transition-colors">Portal</a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fas fa-chevron-right text-gray-400 text-xs mx-1 md:mx-2"></i>
+                            <a href="https://cmitabuna-ba.portaltp.com.br/consultas/receitas.aspx" target="_blank" class="hover:text-ita-black hover:underline transition-colors">Receita</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fas fa-chevron-right text-gray-400 text-xs mx-1 md:mx-2"></i>
+                            <a href="https://cmitabuna-ba.portaltp.com.br/consultas/documentos.aspx?id=809" target="_blank" class="text-ita-black font-semibold hover:underline">Receita Prevista x Receita Realizada</a>
+                        </div>
+                    </li>
+                </ol>
             </nav>
 
             <!-- Botão de Atualização -->
             <button type="button" class="bg-ita-yellow text-ita-black font-bold py-2.5 px-6 text-sm rounded shadow cursor-default flex items-center gap-2" title="Data da última atualização dos dados">
-                <i class="fas fa-calendar-check"></i> Atualizado em 27/05/2026
+                <i class="fas fa-calendar-check"></i> Atualizado em 08/06/2026
             </button>
         </div>
 
@@ -121,9 +122,12 @@
                 </div>
 
                 <!-- Botão de Exportação -->
-                <div class="w-full md:w-auto flex justify-end">
-                    <button onclick="exportToCSV()" class="bg-ita-yellow hover:bg-yellow-500 text-ita-black font-bold py-2.5 px-6 rounded shadow transition duration-200 flex items-center gap-2">
-                        <i class="fas fa-download"></i> Exportar Dados (.CSV)
+                <div class="w-full md:w-auto flex flex-col sm:flex-row justify-end gap-3">
+                    <button onclick="exportToCSV()" class="bg-ita-yellow hover:bg-yellow-500 text-ita-black font-bold py-2.5 px-6 rounded shadow transition duration-200 flex items-center justify-center gap-2">
+                        <i class="fas fa-file-csv"></i> Exportar (.CSV)
+                    </button>
+                    <button onclick="exportToXLSX()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-6 rounded shadow transition duration-200 flex items-center justify-center gap-2">
+                        <i class="fas fa-file-excel"></i> Exportar (.XLSX)
                     </button>
                 </div>
             </div>
@@ -152,14 +156,14 @@
 
     <!-- Lógica JavaScript -->
     <script>
-        // Base de Dados (Extraída dos documentos PDF fornecidos)
+        // Base de Dados Atualizada
         const db = [
             // EXERCÍCIO 2026
             { year: 2026, month: 'Janeiro', expected: 2605733.90, realized: 2491071.88, date: '16/01/2026' },
             { year: 2026, month: 'Fevereiro', expected: 2605733.90, realized: 2491071.88, date: '10/02/2026' },
             { year: 2026, month: 'Março', expected: 2605733.90, realized: 2491071.88, date: '10/03/2026' },
             { year: 2026, month: 'Abril', expected: 2605733.90, realized: 2491071.88, date: '13/04/2026' },
-            { year: 2026, month: 'Maio', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Maio', expected: 2605733.90, realized: 2663064.91, date: '11/05/2026' }, // Atualizado conforme PDF (2.000.000,00 + 605.733,90 + 57.331,01)
             { year: 2026, month: 'Junho', expected: 2605733.90, realized: 0, date: '-' },
             { year: 2026, month: 'Julho', expected: 2605733.90, realized: 0, date: '-' },
             { year: 2026, month: 'Agosto', expected: 2605733.90, realized: 0, date: '-' },
@@ -212,7 +216,7 @@
         ];
 
         let currentFilteredData = [];
-        let expandedState = {}; // Novo estado para controlar abertura/fecho dos anos
+        let expandedState = {};
 
         // Função para formatar moeda em Reais (BRL)
         const formatCurrency = (value) => {
@@ -240,12 +244,12 @@
             const years = Object.keys(groupedData).sort((a, b) => b - a);
 
             years.forEach(year => {
-                // Estado de expansão padrão (aberto)
+                // Modificado para as abas começarem sempre FECHADAS por defeito
                 if (expandedState[year] === undefined) {
-                    expandedState[year] = true;
+                    expandedState[year] = false;
                 }
 
-                // Cabeçalho de Agrupamento por Ano (Agora Interativo e Congelado)
+                // Cabeçalho de Agrupamento por Ano
                 const yearHeader = document.createElement('tr');
                 yearHeader.className = 'cursor-pointer hover:bg-gray-200 transition-colors';
                 yearHeader.onclick = () => toggleYear(year);
@@ -267,11 +271,10 @@
                 `;
                 tableBody.appendChild(yearHeader);
 
-                // Cabeçalho de colunas inserido em cada exercício (Congelado logo abaixo do Ano)
+                // Cabeçalho de colunas
                 const colHeader = document.createElement('tr');
                 colHeader.className = `row-year-${year} text-xs uppercase text-ita-yellow ${expandedState[year] ? '' : 'hidden'}`;
                 
-                // Classes de congelamento (sticky top-[48px] garante que fica exatamente debaixo da linha do ano que tem h-12/48px)
                 const thClass = "px-6 py-4 font-bold sticky top-[48px] z-10 bg-ita-black shadow-md";
 
                 colHeader.innerHTML = `
@@ -285,6 +288,7 @@
 
                 let yearExpected = 0;
                 let yearRealized = 0;
+                let yearDiff = 0; // Acumulador para a diferença das células preenchidas
 
                 // Linhas dos Meses
                 groupedData[year].forEach((row, index) => {
@@ -294,11 +298,11 @@
                     let diffDisplay = '';
                     let diffColorClass = '';
                     
-                    // Lógica para excluir o valor da diferença e receita realizada em meses futuros (onde date é '-')
                     if (row.date === '-') {
                         diffDisplay = '-';
                     } else {
                         const diff = row.realized - row.expected;
+                        yearDiff += diff; // Soma a diferença apenas dos meses realizados
                         diffColorClass = diff < 0 ? 'text-red-600 font-medium' : (diff > 0 ? 'text-green-600 font-medium' : '');
                         diffDisplay = `${diff > 0 ? '+' : ''}${formatCurrency(diff)}`;
                     }
@@ -306,7 +310,6 @@
                     const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
 
                     const tr = document.createElement('tr');
-                    // Adicionada a classe row-year-${year} para controle de visibilidade
                     tr.className = `row-year-${year} ${bgClass} border-b hover:bg-yellow-50 transition-colors ${expandedState[year] ? '' : 'hidden'}`;
                     tr.innerHTML = `
                         <td class="px-6 py-4 font-medium pl-10"><i class="fas fa-angle-right text-gray-300 mr-2"></i> ${row.month}</td>
@@ -318,8 +321,7 @@
                     tableBody.appendChild(tr);
                 });
 
-                // Subtotal do Ano (NOVO)
-                const yearDiff = yearRealized - yearExpected;
+                // Subtotal do Ano
                 const yearDiffColorClass = yearDiff < 0 ? 'text-red-600' : (yearDiff > 0 ? 'text-green-600' : '');
                 
                 const subtotalTr = document.createElement('tr');
@@ -335,7 +337,7 @@
             });
         }
 
-        // Nova função para alternar visibilidade das linhas de um ano
+        // Função para alternar visibilidade das linhas de um ano
         function toggleYear(year) {
             expandedState[year] = !expandedState[year];
             const rows = document.querySelectorAll(`.row-year-${year}`);
@@ -364,24 +366,21 @@
             renderTable();
         }
 
-        // Função para exportar os dados em formato editável/estruturado (.CSV)
+        // Exportação para .CSV original
         function exportToCSV() {
             if(currentFilteredData.length === 0) {
                 alert("Não há dados para exportar com os filtros atuais.");
                 return;
             }
 
-            // Cabeçalhos (Acentuação requer BOM para abrir direito no Excel PT-BR/PT-PT)
             let csvContent = '\uFEFF'; 
             csvContent += "Ano;Mês de Referência;Receita Prevista (R$);Receita Realizada (R$);Diferença (R$);Data do Recebimento\n";
 
-            // Dados
             currentFilteredData.forEach(row => {
                 const expectedStr = row.expected.toFixed(2).replace('.', ',');
                 let realizedStr = '';
                 let diffStr = '';
                 
-                // Tratar meses sem repasse na exportação
                 if (row.date === '-') {
                     realizedStr = '-';
                     diffStr = '-';
@@ -394,7 +393,6 @@
                 csvContent += `${row.year};${row.month};"${expectedStr}";"${realizedStr}";"${diffStr}";${row.date}\n`;
             });
 
-            // Criar o ficheiro e iniciar a transferência
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
@@ -406,6 +404,41 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // Nova Exportação para .XLSX usando SheetJS
+        function exportToXLSX() {
+            if(currentFilteredData.length === 0) {
+                alert("Não há dados para exportar com os filtros atuais.");
+                return;
+            }
+
+            // Preparar os dados para a folha de cálculo
+            const dataToExport = currentFilteredData.map(row => {
+                const isFuture = row.date === '-';
+                const realized = isFuture ? null : row.realized;
+                const diff = isFuture ? null : (row.realized - row.expected);
+
+                return {
+                    "Ano": row.year,
+                    "Mês de Referência": row.month,
+                    "Receita Prevista (R$)": row.expected,
+                    "Receita Realizada (R$)": realized,
+                    "Diferença (R$)": diff,
+                    "Data do Recebimento": row.date
+                };
+            });
+
+            // Criar um novo workbook (pasta de trabalho)
+            const wb = XLSX.utils.book_new();
+            // Criar a worksheet a partir do JSON de dados
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+            // Adicionar folha à pasta
+            XLSX.utils.book_append_sheet(wb, ws, "Receitas");
+
+            // Acionar o download do ficheiro Excel
+            XLSX.writeFile(wb, "transparencia_receitas_itabuna.xlsx");
         }
 
         // Event Listeners para os filtros
