@@ -81,7 +81,7 @@
 
             <!-- Botão de Atualização -->
             <button type="button" class="bg-ita-yellow text-ita-black font-bold py-2.5 px-6 text-sm rounded shadow cursor-default flex items-center gap-2" title="Data da última atualização dos dados">
-                <i class="fas fa-calendar-check"></i> Atualizado em 08/06/2026
+                <i class="fas fa-calendar-check"></i> Atualizado em 27/07/2026
             </button>
         </div>
 
@@ -163,9 +163,9 @@
             { year: 2026, month: 'Fevereiro', expected: 2605733.90, realized: 2491071.88, date: '10/02/2026' },
             { year: 2026, month: 'Março', expected: 2605733.90, realized: 2491071.88, date: '10/03/2026' },
             { year: 2026, month: 'Abril', expected: 2605733.90, realized: 2491071.88, date: '13/04/2026' },
-            { year: 2026, month: 'Maio', expected: 2605733.90, realized: 2663064.91, date: '11/05/2026' }, // Atualizado conforme PDF (2.000.000,00 + 605.733,90 + 57.331,01)
-            { year: 2026, month: 'Junho', expected: 2605733.90, realized: 0, date: '-' },
-            { year: 2026, month: 'Julho', expected: 2605733.90, realized: 0, date: '-' },
+            { year: 2026, month: 'Maio', expected: 2605733.90, realized: 2663064.91, date: '11/05/2026' }, 
+            { year: 2026, month: 'Junho', expected: 2605733.90, realized: 2663064.91, date: '16/06/2026' }, // Atualizado conforme PDF (2.605.733,90 + 57.331,01)
+            { year: 2026, month: 'Julho', expected: 2605733.90, realized: 2663064.91, date: '10/07/2026' }, // Atualizado conforme PDF (2.605.733,90 + 57.331,01)
             { year: 2026, month: 'Agosto', expected: 2605733.90, realized: 0, date: '-' },
             { year: 2026, month: 'Setembro', expected: 2605733.90, realized: 0, date: '-' },
             { year: 2026, month: 'Outubro', expected: 2605733.90, realized: 0, date: '-' },
@@ -251,18 +251,19 @@
 
                 // Cabeçalho de Agrupamento por Ano
                 const yearHeader = document.createElement('tr');
-                yearHeader.className = 'cursor-pointer hover:bg-gray-200 transition-colors';
+                yearHeader.className = 'cursor-pointer hover:opacity-90 transition-opacity';
                 yearHeader.onclick = () => toggleYear(year);
                 
                 const chevronClass = expandedState[year] ? 'fa-chevron-down' : 'fa-chevron-right';
                 
+                // Aplicada a cor ita-yellow (a mesma do botão exportar) para o fundo da aba
                 yearHeader.innerHTML = `
-                    <td colspan="5" class="h-12 px-6 select-none sticky top-0 z-20 bg-ita-gray-light border-b border-gray-300 shadow-sm">
+                    <td colspan="5" class="h-12 px-6 select-none sticky top-0 z-20 bg-ita-yellow border-b border-yellow-500 shadow-sm">
                         <div class="flex items-center justify-between font-bold text-ita-black h-full">
                             <div>
-                                <i class="fas fa-calendar-alt mr-2 text-ita-gray-dark"></i> Exercício Financeiro: ${year}
+                                <i class="fas fa-calendar-alt mr-2 text-ita-black"></i> Exercício Financeiro: ${year}
                             </div>
-                            <div class="flex items-center text-xs text-ita-gray-dark font-normal">
+                            <div class="flex items-center text-xs text-ita-black font-semibold">
                                 <span class="mr-2">Clique para expandir/recolher</span>
                                 <i class="fas ${chevronClass} transition-transform" id="icon-${year}"></i>
                             </div>
@@ -406,7 +407,7 @@
             document.body.removeChild(link);
         }
 
-        // Nova Exportação para .XLSX usando SheetJS
+        // Exportação para .XLSX usando SheetJS
         function exportToXLSX() {
             if(currentFilteredData.length === 0) {
                 alert("Não há dados para exportar com os filtros atuais.");
