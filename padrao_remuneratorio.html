@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Câmara Municipal de Itabuna - Tabela Remuneratória</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -129,10 +128,10 @@
                     <i data-lucide="file-text" class="w-5 h-5"></i>
                     <span>Tabela de Padrão Remuneratório</span>
                 </div>
-                <p class="text-xs text-itabuna-gray-300">Atualizado conforme Leis Municipais vigentes (2024/2025)</p>
+                <p class="text-xs text-itabuna-gray-300">Atualizado conforme Leis Municipais vigentes (2024/2025/2026)</p>
                 <div class="mt-2">
                     <button class="bg-itabuna-yellow-500 text-itabuna-black font-bold py-1.5 px-4 rounded-lg text-xs flex items-center gap-1.5 shadow-md cursor-default">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Atualizado em 27/05/2026
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Atualizado em 17/06/2026
                     </button>
                 </div>
             </div>
@@ -168,19 +167,11 @@
         </nav>
 
         <!-- INTRODUÇÃO E NOTA LEGAL -->
-        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-8 border-itabuna-yellow-500 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h2 class="text-lg font-bold text-itabuna-black flex items-center gap-2">
-                    <i data-lucide="info" class="text-itabuna-yellow-500 w-5 h-5"></i>
-                    Consulta do Plano de Cargos e Salários
-                </h2>
-                <p class="text-itabuna-gray-500 text-sm mt-1">
-                    Painel de dados compilados com base na <strong>Lei Municipal nº 2.690</strong> (Cargos Eletivos) e <strong>Lei Municipal nº 2.723</strong> (Cargos Efetivos, Resolução 015/1990 e Comissionados).
-                </p>
-            </div>
-            <div class="bg-itabuna-gray-100 py-2 px-4 rounded-xl border border-itabuna-gray-200 text-xs text-itabuna-gray-700 font-mono w-full md:w-auto">
-                Espaço Cult. Prof. Josué de Souza Brandão
-            </div>
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-8 border-itabuna-yellow-500 mb-8">
+            <h2 class="text-lg font-bold text-itabuna-black flex items-center gap-2 uppercase tracking-wide">
+                <i data-lucide="info" class="text-itabuna-yellow-500 w-5 h-5"></i>
+                TABELA COM O PADRÃO REMUNERATÓRIO DE CARGOS E FUNÇÕES
+            </h2>
         </div>
 
         <!-- CARDS DE MÉTRICAS / DASHBOARD -->
@@ -191,7 +182,7 @@
                     <i data-lucide="briefcase" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <p class="text-xs font-semibold text-itabuna-gray-500 uppercase tracking-wider">Total de Funções</p>
+                    <p class="text-xs font-semibold text-itabuna-gray-500 uppercase tracking-wider">Total de Cargos</p>
                     <h3 id="stat-total-jobs" class="text-2xl font-black text-itabuna-black mt-0.5">55</h3>
                     <p class="text-xs text-itabuna-gray-400">cargos mapeados</p>
                 </div>
@@ -299,7 +290,8 @@
 
     <!-- JAVASCRIPT DE CONFIGURAÇÃO DOS DADOS E TABELAS -->
     <script>
-        // Todos os dados compilados e limpos do PDF
+        // Todos os dados compilados e limpos. 
+        // Revisão de 4,26% baseada na Lei Municipal 2.769/2026 aplicada a todos exceto Eletivo.
         const dataset = {
             eletivo: {
                 title: "Cargo Eletivo",
@@ -311,77 +303,77 @@
             },
             efetivo: {
                 title: "Cargos Efetivos",
-                law: "Lei Municipal nº 2.723, de 20 de junho de 2025",
+                law: "Lei Municipal nº 2.769, de 17 de junho de 2026.",
                 icon: "users",
                 items: [
-                    { item: 1, cargo: "Administrador de Pessoal e Recursos Humanos", vencimento: 5845.09, formatado: "R$ 5.845,09", tipo: "Vencimento" },
-                    { item: 2, cargo: "Agente de Almoxarifado", vencimento: 2423.65, formatado: "R$ 2.423,65", tipo: "Vencimento" },
-                    { item: 3, cargo: "Agente de Suprimento e Patrimônio", vencimento: 9550.33, formatado: "R$ 9.550,33", tipo: "Vencimento" },
-                    { item: 4, cargo: "Analista de Controle Interno", vencimento: 8576.00, formatado: "R$ 8.576,00", tipo: "Vencimento" },
-                    { item: 5, cargo: "Analista de Processo Legislativo", vencimento: 9550.33, formatado: "R$ 9.550,33", tipo: "Vencimento" },
-                    { item: 6, cargo: "Analista Técnica Administrativa", vencimento: 8576.00, formatado: "R$ 8.576,00", tipo: "Vencimento" },
-                    { item: 7, cargo: "Analista Técnica em Licitação", vencimento: 8576.00, formatado: "R$ 8.576,00", tipo: "Vencimento" },
-                    { item: 8, cargo: "Analista Técnica Financeira", vencimento: 8576.00, formatado: "R$ 8.576,00", tipo: "Vencimento" },
-                    { item: 9, cargo: "Analista Técnica Trabalhista e em Recursos Humanos", vencimento: 8576.00, formatado: "R$ 8.576,00", tipo: "Vencimento" },
-                    { item: 10, cargo: "Analista Técnico Legislativo e Processual", vencimento: 14123.53, formatado: "R$ 14.123,53", tipo: "Vencimento" },
-                    { item: 11, cargo: "Arquivista", vencimento: 2796.53, formatado: "R$ 2.796,53", tipo: "Vencimento" },
-                    { item: 12, cargo: "Assessor de Cerimonial e Relações Institucionais", vencimento: 3728.70, formatado: "R$ 3.728,70", tipo: "Vencimento" },
-                    { item: 13, cargo: "Assessor Técnico em Comunicação Social/Radio e Televisão", vencimento: 5779.48, formatado: "R$ 5.779,48", tipo: "Vencimento" },
-                    { item: 14, cargo: "Assessor Técnico em Comunicação Social/Jornalismo", vencimento: 5779.48, formatado: "R$ 5.779,48", tipo: "Vencimento" },
-                    { item: 15, cargo: "Assistente Administrativo", vencimento: 2796.53, formatado: "R$ 2.796,53", tipo: "Vencimento" },
-                    { item: 16, cargo: "Assistente de Processo Legislativo", vencimento: 5586.97, formatado: "R$ 5.586,97", tipo: "Vencimento" },
-                    { item: 17, cargo: "Assistente Parlamentar", vencimento: 3597.10, formatado: "R$ 3.597,10", tipo: "Vencimento" },
-                    { item: 18, cargo: "Auxiliar de Copa e Cozinha", vencimento: 2050.78, formatado: "R$ 2.050,78", tipo: "Vencimento" },
-                    { item: 19, cargo: "Auxiliar Técnico Contábil", vencimento: 10016.60, formatado: "R$ 10.016,60", tipo: "Vencimento" },
-                    { item: 20, cargo: "Contador", vencimento: 14964.59, formatado: "R$ 14.964,59", tipo: "Vencimento" },
-                    { item: 21, cargo: "Escriturário Contábil", vencimento: 2796.53, formatado: "R$ 2.796,53", tipo: "Vencimento" },
-                    { item: 22, cargo: "Garçom", vencimento: 2423.65, formatado: "R$ 2.423,65", tipo: "Vencimento" },
-                    { item: 23, cargo: "Intérprete em Linguagem de Sinais - LIBRAS", vencimento: 3728.70, formatado: "R$ 3.728,70", tipo: "Vencimento" },
-                    { item: 24, cargo: "Mensageiro", vencimento: 2423.65, formatado: "R$ 2.423,65", tipo: "Vencimento" },
-                    { item: 25, cargo: "Motorista", vencimento: 2423.65, formatado: "R$ 2.423,65", tipo: "Vencimento" },
-                    { item: 26, cargo: "Oficial de Reprografia", vencimento: 2423.65, formatado: "R$ 2.423,65", tipo: "Vencimento" },
-                    { item: 27, cargo: "Operador de Áudio e Vídeo", vencimento: 2796.43, formatado: "R$ 2.796,43", tipo: "Vencimento" },
-                    { item: 28, cargo: "Protocolista", vencimento: 2423.65, formatado: "R$ 2.423,65", tipo: "Vencimento" },
-                    { item: 29, cargo: "Recepcionista", vencimento: 2796.53, formatado: "R$ 2.796,53", tipo: "Vencimento" },
-                    { item: 30, cargo: "Técnico Segurança do Trabalho", vencimento: 3728.70, formatado: "R$ 3.728,70", tipo: "Vencimento" }
+                    { item: 1, cargo: "Administrador de Pessoal e Recursos Humanos", vencimento: 6094.09, formatado: "R$ 6.094,09", tipo: "Vencimento" },
+                    { item: 2, cargo: "Agente de Almoxarifado", vencimento: 2526.90, formatado: "R$ 2.526,90", tipo: "Vencimento" },
+                    { item: 3, cargo: "Agente de Suprimento e Patrimônio", vencimento: 9957.17, formatado: "R$ 9.957,17", tipo: "Vencimento" },
+                    { item: 4, cargo: "Analista de Controle Interno", vencimento: 8941.34, formatado: "R$ 8.941,34", tipo: "Vencimento" },
+                    { item: 5, cargo: "Analista de Processo Legislativo", vencimento: 9957.17, formatado: "R$ 9.957,17", tipo: "Vencimento" },
+                    { item: 6, cargo: "Analista Técnica Administrativa", vencimento: 8941.34, formatado: "R$ 8.941,34", tipo: "Vencimento" },
+                    { item: 7, cargo: "Analista Técnica em Licitação", vencimento: 8941.34, formatado: "R$ 8.941,34", tipo: "Vencimento" },
+                    { item: 8, cargo: "Analista Técnica Financeira", vencimento: 8941.34, formatado: "R$ 8.941,34", tipo: "Vencimento" },
+                    { item: 9, cargo: "Analista Técnica Trabalhista e em Recursos Humanos", vencimento: 8941.34, formatado: "R$ 8.941,34", tipo: "Vencimento" },
+                    { item: 10, cargo: "Analista Técnico Legislativo e Processual", vencimento: 14725.19, formatado: "R$ 14.725,19", tipo: "Vencimento" },
+                    { item: 11, cargo: "Arquivista", vencimento: 2915.66, formatado: "R$ 2.915,66", tipo: "Vencimento" },
+                    { item: 12, cargo: "Assessor de Cerimonial e Relações Institucionais", vencimento: 3887.54, formatado: "R$ 3.887,54", tipo: "Vencimento" },
+                    { item: 13, cargo: "Assessor Técnico em Comunicação Social/Radio e Televisão", vencimento: 6025.69, formatado: "R$ 6.025,69", tipo: "Vencimento" },
+                    { item: 14, cargo: "Assessor Técnico em Comunicação Social/Jornalismo", vencimento: 6025.69, formatado: "R$ 6.025,69", tipo: "Vencimento" },
+                    { item: 15, cargo: "Assistente Administrativo", vencimento: 2915.66, formatado: "R$ 2.915,66", tipo: "Vencimento" },
+                    { item: 16, cargo: "Assistente de Processo Legislativo", vencimento: 5824.97, formatado: "R$ 5.824,97", tipo: "Vencimento" },
+                    { item: 17, cargo: "Assistente Parlamentar", vencimento: 3750.34, formatado: "R$ 3.750,34", tipo: "Vencimento" },
+                    { item: 18, cargo: "Auxiliar de Copa e Cozinha", vencimento: 2138.14, formatado: "R$ 2.138,14", tipo: "Vencimento" },
+                    { item: 19, cargo: "Auxiliar Técnico Contábil", vencimento: 10443.31, formatado: "R$ 10.443,31", tipo: "Vencimento" },
+                    { item: 20, cargo: "Contador", vencimento: 15602.08, formatado: "R$ 15.602,08", tipo: "Vencimento" },
+                    { item: 21, cargo: "Escriturário Contábil", vencimento: 2915.66, formatado: "R$ 2.915,66", tipo: "Vencimento" },
+                    { item: 22, cargo: "Garçom", vencimento: 2526.90, formatado: "R$ 2.526,90", tipo: "Vencimento" },
+                    { item: 23, cargo: "Intérprete em Linguagem de Sinais - LIBRAS", vencimento: 3887.54, formatado: "R$ 3.887,54", tipo: "Vencimento" },
+                    { item: 24, cargo: "Mensageiro", vencimento: 2526.90, formatado: "R$ 2.526,90", tipo: "Vencimento" },
+                    { item: 25, cargo: "Motorista", vencimento: 2526.90, formatado: "R$ 2.526,90", tipo: "Vencimento" },
+                    { item: 26, cargo: "Oficial de Reprografia", vencimento: 2526.90, formatado: "R$ 2.526,90", tipo: "Vencimento" },
+                    { item: 27, cargo: "Operador de Áudio e Vídeo", vencimento: 2915.56, formatado: "R$ 2.915,56", tipo: "Vencimento" },
+                    { item: 28, cargo: "Protocolista", vencimento: 2526.90, formatado: "R$ 2.526,90", tipo: "Vencimento" },
+                    { item: 29, cargo: "Recepcionista", vencimento: 2915.66, formatado: "R$ 2.915,66", tipo: "Vencimento" },
+                    { item: 30, cargo: "Técnico Segurança do Trabalho", vencimento: 3887.54, formatado: "R$ 3.887,54", tipo: "Vencimento" }
                 ]
             },
             resolucao: {
                 title: "Cargos da Resolução nº 015/1990",
-                law: "Lei Municipal nº 2.723, de 20 de junho de 2025",
+                law: "Lei Municipal nº 2.769, de 17 de junho de 2026.",
                 icon: "file-signature",
                 items: [
-                    { item: 1, cargo: "Agente Administrativo", vencimento: 9539.61, formatado: "R$ 9.539,61", tipo: "Vencimento" },
-                    { item: 2, cargo: "Auxiliar de Contabilidade", vencimento: 9539.61, formatado: "R$ 9.539,61", tipo: "Vencimento" },
-                    { item: 3, cargo: "Contador", vencimento: 20202.59, formatado: "R$ 20.202,59", tipo: "Vencimento" },
-                    { item: 4, cargo: "Copeira", vencimento: 3492.87, formatado: "R$ 3.492,87", tipo: "Vencimento" },
-                    { item: 5, cargo: "Redatora de Debate", vencimento: 9539.61, formatado: "R$ 9.539,61", tipo: "Vencimento" },
-                    { item: 6, cargo: "Secretária Parlamentar", vencimento: 14107.70, formatado: "R$ 14.107,70", tipo: "Vencimento" },
-                    { item: 7, cargo: "Telefonista", vencimento: 3593.04, formatado: "R$ 3.593,04", tipo: "Vencimento" }
+                    { item: 1, cargo: "Agente Administrativo", vencimento: 9946.00, formatado: "R$ 9.946,00", tipo: "Vencimento" },
+                    { item: 2, cargo: "Auxiliar de Contabilidade", vencimento: 9946.00, formatado: "R$ 9.946,00", tipo: "Vencimento" },
+                    { item: 3, cargo: "Contador", vencimento: 21063.22, formatado: "R$ 21.063,22", tipo: "Vencimento" },
+                    { item: 4, cargo: "Copeira", vencimento: 3641.67, formatado: "R$ 3.641,67", tipo: "Vencimento" },
+                    { item: 5, cargo: "Redatora de Debate", vencimento: 9946.00, formatado: "R$ 9.946,00", tipo: "Vencimento" },
+                    { item: 6, cargo: "Secretária Parlamentar", vencimento: 14708.69, formatado: "R$ 14.708,69", tipo: "Vencimento" },
+                    { item: 7, cargo: "Telefonista", vencimento: 3746.10, formatado: "R$ 3.746,10", tipo: "Vencimento" }
                 ]
             },
             comissionado: {
                 title: "Cargos Comissionados",
-                law: "Lei Municipal nº 2.723, de 20 de junho de 2025",
+                law: "Lei Municipal nº 2.769, de 17 de junho de 2026.",
                 icon: "shield-alert",
                 items: [
-                    { item: 1, cargo: "Assessor de Comunicação Social", vencimento: 6751.60, formatado: "R$ 6.751,60", tipo: "Vencimento" },
-                    { item: 2, cargo: "Assessor Legislativo", vencimento: 5810.57, formatado: "R$ 5.810,57", tipo: "Vencimento" },
-                    { item: 3, cargo: "Assessor Parlamentar de Gabinete", vencimento: 2189.23, formatado: "R$ 2.189,23", tipo: "Vencimento" },
-                    { item: 4, cargo: "Assessor Parlamentar da Presidência", vencimento: 6972.08, formatado: "R$ 6.972,08", tipo: "Vencimento" },
-                    { item: 5, cargo: "Chefe de Almoxarifado", vencimento: 6751.60, formatado: "R$ 6.751,60", tipo: "Vencimento" },
-                    { item: 6, cargo: "Chefe de Contabilidade e Tesouraria", vencimento: 7312.85, formatado: "R$ 7.312,85", tipo: "Vencimento" },
-                    { item: 7, cargo: "Chefe de Gabinete", vencimento: 6751.60, formatado: "R$ 6.751,60", tipo: "Vencimento" },
-                    { item: 8, cargo: "Chefe de Patrimônio", vencimento: 6751.60, formatado: "R$ 6.751,60", tipo: "Vencimento" },
-                    { item: 9, cargo: "Chefe de Recursos Humanos", vencimento: 7312.85, formatado: "R$ 7.312,85", tipo: "Vencimento" },
-                    { item: 10, cargo: "Consultor Jurídico", vencimento: 7312.85, formatado: "R$ 7.312,85", tipo: "Vencimento" },
-                    { item: 11, cargo: "Diretor Administrativo", vencimento: 11579.61, formatado: "R$ 11.579,61", tipo: "Vencimento" },
-                    { item: 12, cargo: "Diretor Parlamentar", vencimento: 7312.85, formatado: "R$ 7.312,85", tipo: "Vencimento" },
-                    { item: 13, cargo: "Oficial Legislativo", vencimento: 4648.46, formatado: "R$ 4.648,46", tipo: "Vencimento" },
-                    { item: 14, cargo: "Ouvidor Parlamentar", vencimento: 7312.85, formatado: "R$ 7.312,85", tipo: "Vencimento" },
-                    { item: 15, cargo: "Superintendente Administrativo e de Planejamento", vencimento: 13000.00, formatado: "R$ 13.000,00", tipo: "Vencimento" },
-                    { item: 16, cargo: "Superintendente Financeiro, Contábil, Licitatória e de Controle Interno", vencimento: 13000.00, formatado: "R$ 13.000,00", tipo: "Vencimento" },
-                    { item: 17, cargo: "Superintendente Executiva de Legislação, Atos Oficiais e Assuntos Técnicos", vencimento: 13000.00, formatado: "R$ 13.000,00", tipo: "Vencimento" }
+                    { item: 1, cargo: "Assessor de Comunicação Social", vencimento: 7039.22, formatado: "R$ 7.039,22", tipo: "Vencimento" },
+                    { item: 2, cargo: "Assessor Legislativo", vencimento: 6058.10, formatado: "R$ 6.058,10", tipo: "Vencimento" },
+                    { item: 3, cargo: "Assessor Parlamentar de Gabinete", vencimento: 2282.49, formatado: "R$ 2.282,49", tipo: "Vencimento" },
+                    { item: 4, cargo: "Assessor Parlamentar da Presidência", vencimento: 7269.09, formatado: "R$ 7.269,09", tipo: "Vencimento" },
+                    { item: 5, cargo: "Chefe de Almoxarifado", vencimento: 7039.22, formatado: "R$ 7.039,22", tipo: "Vencimento" },
+                    { item: 6, cargo: "Chefe de Contabilidade e Tesouraria", vencimento: 7624.38, formatado: "R$ 7.624,38", tipo: "Vencimento" },
+                    { item: 7, cargo: "Chefe de Gabinete", vencimento: 7039.22, formatado: "R$ 7.039,22", tipo: "Vencimento" },
+                    { item: 8, cargo: "Chefe de Patrimônio", vencimento: 7039.22, formatado: "R$ 7.039,22", tipo: "Vencimento" },
+                    { item: 9, cargo: "Chefe de Recursos Humanos", vencimento: 7624.38, formatado: "R$ 7.624,38", tipo: "Vencimento" },
+                    { item: 10, cargo: "Consultor Jurídico", vencimento: 7624.38, formatado: "R$ 7.624,38", tipo: "Vencimento" },
+                    { item: 11, cargo: "Diretor Administrativo", vencimento: 12072.90, formatado: "R$ 12.072,90", tipo: "Vencimento" },
+                    { item: 12, cargo: "Diretor Parlamentar", vencimento: 7624.38, formatado: "R$ 7.624,38", tipo: "Vencimento" },
+                    { item: 13, cargo: "Oficial Legislativo", vencimento: 4846.48, formatado: "R$ 4.846,48", tipo: "Vencimento" },
+                    { item: 14, cargo: "Ouvidor Parlamentar", vencimento: 7624.38, formatado: "R$ 7.624,38", tipo: "Vencimento" },
+                    { item: 15, cargo: "Superintendente Administrativo e de Planejamento", vencimento: 13553.80, formatado: "R$ 13.553,80", tipo: "Vencimento" },
+                    { item: 16, cargo: "Superintendente Financeiro, Contábil, Licitatória e de Controle Interno", vencimento: 13553.80, formatado: "R$ 13.553,80", tipo: "Vencimento" },
+                    { item: 17, cargo: "Superintendente Executiva de Legislação, Atos Oficiais e Assuntos Técnicos", vencimento: 13553.80, formatado: "R$ 13.553,80", tipo: "Vencimento" }
                 ]
             }
         };
