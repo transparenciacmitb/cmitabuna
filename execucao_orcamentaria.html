@@ -73,7 +73,7 @@
                     <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Atualizado em: 09/07/2026
+                    Atualizado em: 10/08/2026
                 </button>
             </div>
         </div>
@@ -123,6 +123,7 @@
                     <label for="filtroMes" class="text-sm font-bold text-gray-800 whitespace-nowrap">Mês:</label>
                     <select id="filtroMes" onchange="renderizar()" class="block w-full md:w-40 rounded-md border-gray-400 shadow-sm focus:border-black focus:ring-black sm:text-sm p-2 border bg-white font-medium">
                         <option value="Todos">Exibir Todos</option>
+                        <option value="Julho">Julho</option>
                         <option value="Junho">Junho</option>
                         <option value="Maio">Maio</option>
                         <option value="Abril">Abril</option>
@@ -175,11 +176,23 @@
     </div>
 
     <script>
-        // Base de dados estruturada a partir dos PDFs (Incluindo Junho/2026)
+        // Base de dados estruturada a partir dos PDFs (Incluindo Julho/2026)
         const dadosDespesas = [
             {
                 ano: "2026",
                 meses: [
+                    {
+                        mes: "Julho",
+                        linhas: [
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "378.000,00", empMes: "0,00", empAte: "225.718,30", liqMes: "214.968,30", liqAte: "214.968,30", pagoMes: "214.968,30", pagoAte: "214.968,30", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.415.000,00", empMes: "98.297,15", empAte: "2.199.160,87", liqMes: "164.525,22", liqAte: "772.366,07", pagoMes: "170.731,32", pagoAte: "772.366,07", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "0,00", empAte: "25.285.641,68", liqMes: "2.247.526,43", liqAte: "14.204.249,34", pagoMes: "2.247.526,43", pagoAte: "14.204.249,34", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "0,00", empAte: "11.314,40", liqMes: "0,00", liqAte: "8.397,89", pagoMes: "0,00", pagoAte: "8.397,89", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.552.836,85", empMes: "98.297,15", empAte: "27.496.116,95", liqMes: "2.412.051,65", liqAte: "14.985.013,30", pagoMes: "2.418.257,75", pagoAte: "14.985.013,30", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "428.000,00", empMes: "0,00", empAte: "225.718,30", liqMes: "214.968,30", liqAte: "214.968,30", pagoMes: "214.968,30", pagoAte: "214.968,30", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "98.297,15", empAte: "27.721.835,25", liqMes: "2.627.019,95", liqAte: "15.199.981,60", pagoMes: "2.633.226,05", pagoAte: "15.199.981,60", tipo: "total" }
+                        ]
+                    },
                     {
                         mes: "Junho",
                         linhas: [
@@ -254,6 +267,7 @@
                     }
                 ]
             },
+            
             {
                 ano: "2025",
                 meses: [
@@ -353,7 +367,7 @@
                     // Definimos se o acordeão secundário (Mês) deve iniciar aberto
                     const isMesOpen = (filtroMes !== 'Todos' || indexMes === 0) ? 'open' : '';
 
-                    // Geração do corpo da tabela para o respectivo mês - Ajuste estrito para escala de cinza e preto
+                    // Geração do corpo da tabela para o respectivo mês
                     const tableRows = dadoMes.linhas.map(linha => {
                         let classes = "table-row hover:bg-gray-100 transition-colors";
                         if (linha.tipo === 'subtotal') classes = "table-row table-row-subtotal";
@@ -373,7 +387,7 @@
                         `;
                     }).join('');
 
-                    // Geração do Acordeão Interno (Agrupamento Mês) - Cores alinhadas com a paleta
+                    // Geração do Acordeão Interno (Agrupamento Mês)
                     conteudoMeses += `
                         <details class="mb-3 bg-white rounded-lg shadow-sm border border-gray-300 overflow-hidden group/mes" ${isMesOpen}>
                             <summary class="p-3 md:p-4 bg-gray-100 cursor-pointer flex justify-between items-center font-bold text-md text-black hover:bg-gray-200 transition-colors border-b border-gray-200">
