@@ -73,7 +73,7 @@
                     <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Atualizado em: 10/08/2026
+                    Atualizado em: 03/09/2026
                 </button>
             </div>
         </div>
@@ -123,6 +123,7 @@
                     <label for="filtroMes" class="text-sm font-bold text-gray-800 whitespace-nowrap">Mês:</label>
                     <select id="filtroMes" onchange="renderizar()" class="block w-full md:w-40 rounded-md border-gray-400 shadow-sm focus:border-black focus:ring-black sm:text-sm p-2 border bg-white font-medium">
                         <option value="Todos">Exibir Todos</option>
+                        <option value="Agosto">Agosto</option>
                         <option value="Julho">Julho</option>
                         <option value="Junho">Junho</option>
                         <option value="Maio">Maio</option>
@@ -176,11 +177,23 @@
     </div>
 
     <script>
-        // Base de dados estruturada a partir dos PDFs (Incluindo Julho/2026)
+        // Base de dados estruturada a partir dos PDFs (Incluindo Agosto/2026)
         const dadosDespesas = [
             {
                 ano: "2026",
                 meses: [
+                    {
+                        mes: "Agosto",
+                        linhas: [
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "378.000,00", empMes: "64.925,00", empAte: "290.643,30", liqMes: "0,00", liqAte: "214.968,30", pagoMes: "0,00", pagoAte: "214.968,30", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.415.000,00", empMes: "60.803,22", empAte: "2.259.964,09", liqMes: "312.889,93", liqAte: "1.085.256,00", pagoMes: "312.889,93", pagoAte: "1.085.256,00", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "100.000,00", empAte: "25.385.641,68", liqMes: "2.103.651,45", liqAte: "16.307.900,79", pagoMes: "2.103.651,45", pagoAte: "16.307.900,79", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "0,00", empAte: "11.314,40", liqMes: "0,00", liqAte: "8.397,89", pagoMes: "0,00", pagoAte: "8.397,89", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.552.836,85", empMes: "160.803,22", empAte: "27.656.920,17", liqMes: "2.416.541,38", liqAte: "17.401.554,68", pagoMes: "2.416.541,38", pagoAte: "17.401.554,68", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "428.000,00", empMes: "64.925,00", empAte: "290.643,30", liqMes: "0,00", liqAte: "214.968,30", pagoMes: "0,00", pagoAte: "214.968,30", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "225.728,22", empAte: "27.947.563,47", liqMes: "2.416.541,38", liqAte: "17.616.522,98", pagoMes: "2.416.541,38", pagoAte: "17.616.522,98", tipo: "total" }
+                        ]
+                    },
                     {
                         mes: "Julho",
                         linhas: [
