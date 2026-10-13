@@ -62,10 +62,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-black text-black tracking-tight">Demonstrativo da Execução da Despesa</h1>
-                    <h2 class="text-lg font-bold text-gray-800 mt-1">Câmara Municipal de Vereadores de Itabuna - BA</h2>
-                    <p class="text-sm font-medium text-gray-700 mt-2">
-                        CNPJ: 13.235.726/0001-55
-                    </p>
+                    <h2 class="text-lg font-bold text-gray-800 mt-1">CÂMARA MUNICIPAL DE ITABUNA</h2>
                 </div>
                 
                 <!-- Botão de Atualização em Destaque -->
@@ -73,7 +70,7 @@
                     <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Atualizado em: 03/09/2026
+                    Atualizado em: 13/10/2026
                 </button>
             </div>
         </div>
@@ -123,6 +120,7 @@
                     <label for="filtroMes" class="text-sm font-bold text-gray-800 whitespace-nowrap">Mês:</label>
                     <select id="filtroMes" onchange="renderizar()" class="block w-full md:w-40 rounded-md border-gray-400 shadow-sm focus:border-black focus:ring-black sm:text-sm p-2 border bg-white font-medium">
                         <option value="Todos">Exibir Todos</option>
+                        <option value="Setembro">Setembro</option>
                         <option value="Agosto">Agosto</option>
                         <option value="Julho">Julho</option>
                         <option value="Junho">Junho</option>
@@ -170,18 +168,29 @@
         </div>
 
         <!-- Footer Section -->
-        <div class="bg-black p-6 border-t border-gray-800 text-sm text-gray-300 text-center">
-            <p class="font-bold text-[#FFD700]">Manoel Carlos de Jesus Porfirio - Presidente</p>
-            <p class="mt-1">Ricardo Dantas Xavier - 1º Secretário</p>
+        <div class="bg-black p-4 border-t border-gray-800 text-sm text-gray-400 text-center">
+            <p>© 2026 Câmara Municipal de Itabuna. Todos os direitos reservados.</p>
         </div>
     </div>
 
     <script>
-        // Base de dados estruturada a partir dos PDFs (Incluindo Agosto/2026)
+        // Base de dados estruturada a partir dos PDFs (Atualizada com Setembro/2026)
         const dadosDespesas = [
             {
                 ano: "2026",
                 meses: [
+                    {
+                        mes: "Setembro",
+                        linhas: [
+                            { descricao: "01.031.0001.1001 - CONSTRUÇÃO, AMPLIAÇÃO E MODERNIZAÇÃO", dotacaoAtualizada: "378.000,00", empMes: "0,00", empAte: "290.643,30", liqMes: "0,00", liqAte: "214.968,30", pagoMes: "0,00", pagoAte: "214.968,30", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2001 - GESTÃO MANUTENÇÃO DOS SERVIÇOS", dotacaoAtualizada: "3.415.000,00", empMes: "1.328,88", empAte: "2.261.292,95", liqMes: "242.060,14", liqAte: "1.327.316,14", pagoMes: "241.210,14", pagoAte: "1.326.466,14", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2002 - GESTÃO DE PESSOAL E ENCARGOS", dotacaoAtualizada: "25.937.836,85", empMes: "0,00", empAte: "25.385.641,68", liqMes: "1.997.128,12", liqAte: "18.305.028,91", pagoMes: "1.997.128,12", pagoAte: "18.305.028,91", tipo: "detalhe" },
+                            { descricao: "01.031.0001.2003 - QUALIFICAÇÃO E CAPACITAÇÃO", dotacaoAtualizada: "250.000,00", empMes: "0,00", empAte: "11.314,40", liqMes: "0,00", liqAte: "8.397,89", pagoMes: "0,00", pagoAte: "8.397,89", tipo: "detalhe" },
+                            { descricao: "DESPESAS CORRENTES", dotacaoAtualizada: "29.552.836,85", empMes: "1.328,86", empAte: "27.658.249,03", liqMes: "2.239.188,26", liqAte: "19.640.742,94", pagoMes: "2.238.338,26", pagoAte: "19.639.892,94", tipo: "subtotal" },
+                            { descricao: "DESPESAS DE CAPITAL", dotacaoAtualizada: "428.000,00", empMes: "0,00", empAte: "290.643,30", liqMes: "0,00", liqAte: "214.968,30", pagoMes: "0,00", pagoAte: "214.968,30", tipo: "subtotal" },
+                            { descricao: "TOTAL GERAL", dotacaoAtualizada: "29.980.836,85", empMes: "1.328,86", empAte: "27.948.892,33", liqMes: "2.239.188,26", liqAte: "19.855.711,24", pagoMes: "2.238.338,26", pagoAte: "19.854.861,24", tipo: "total" }
+                        ]
+                    },
                     {
                         mes: "Agosto",
                         linhas: [
@@ -280,7 +289,6 @@
                     }
                 ]
             },
-            
             {
                 ano: "2025",
                 meses: [
